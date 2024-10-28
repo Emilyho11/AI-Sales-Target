@@ -5,6 +5,14 @@ import { StandaloneSearchBox, useLoadScript } from "@react-google-maps/api";
 import PlacesSidePopup from '../components/PlacesSidePopup';
 
 const libraries = ["places"];
+const temp = {
+  name: 'Clio Software Company',
+  vicinity: '1234 Main St, Vancouver, BC',
+  rating: 4.5,
+  formatted_phone_number: '123-456-7890',
+  
+}
+const temp2 = true;
 
 const Home = () => {
   const { isLoaded, loadError } = useLoadScript({
@@ -82,7 +90,11 @@ const Home = () => {
     setSelectedLawFirm(null);
   }
 
-
+  const testing = () => {
+    setIsClickedToOpen(true);
+    setSelectedLawFirm(temp);
+  }
+  
   return (
     <ContentContainer>
       <h2>Welcome, Emily Ho</h2>
@@ -120,12 +132,15 @@ const Home = () => {
             userLocation={userLocation} 
           />
           <div className='w-1/3'>
+            {/* <button onClick={testing}>Test</button> */}
             {isClickedToOpen ? (
-              <PlacesSidePopup lawFirm={selectedLawFirm} handleClosePopup={handleClosePopup} />
+              <div>
+                <PlacesSidePopup lawFirm={selectedLawFirm} handleClosePopup={handleClosePopup} />
+              </div>
             ) : (
               <>
                 <h3 className='text-xl font-bold p-4 bg-clio_color'>Nearby Law Firms <span className='font-medium text-sm'> ({lawFirms.length} Found)</span></h3>
-                <ul className='scroll-y-auto h-[590px] overflow-y-auto border border-gray-300'>
+                <ul className='scroll-y-auto h-[590px] overflow-y-auto'>
                   {lawFirms.map((firm, index) => (
                     <li 
                       key={index}
