@@ -41,6 +41,7 @@ const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation })
           place: place,
           icon: null,
         }));
+        map.setZoom(15);
         setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
       });
     }
@@ -89,6 +90,7 @@ const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation })
               icon: null,
             }));
             setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+            map.setZoom(15);
           });
         } else {
           alert("Location not found. Please try again.");

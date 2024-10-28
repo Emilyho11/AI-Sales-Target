@@ -72,52 +72,53 @@ const Home = () => {
   return (
     <ContentContainer>
       <h2>Welcome, Emily Ho</h2>
-      <div className='flex gap-8'>
-        <div className='w-2/3'>
-          <div className="flex items-center z-10 w-full space-x-2 py-4">
-            <StandaloneSearchBox
-              onLoad={(ref) => (searchBox.current = ref)}
-              onPlacesChanged={onPlacesChanged}
-            >
-              <input
-                type="text"
-                placeholder="Search for places..."
-                value={searchBarValue}
-                onChange={(e) => setSearchBarValue(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-              />
-            </StandaloneSearchBox>
-            <button
-              className="bg-dark_green hover:bg-green-500 text-white px-4 py-2 rounded-lg"
-              onClick={onSearchLawFirmsClick}
-            >
-              Search law firms
-            </button>
-            <button
-              className="top-4 right-4 z-10 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg"
-              onClick={getUserLocation}
-            >
-              My Location
-            </button>
-          </div>
+        <div className="flex items-center z-10 w-full space-x-2 py-4">
+          <StandaloneSearchBox
+            onLoad={(ref) => (searchBox.current = ref)}
+            onPlacesChanged={onPlacesChanged}
+          >
+            <input
+              type="text"
+              placeholder="Search for places..."
+              value={searchBarValue}
+              onChange={(e) => setSearchBarValue(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+            />
+          </StandaloneSearchBox>
+          <button
+            className="bg-dark_green hover:bg-green-500 text-white px-4 py-2 rounded-lg"
+            onClick={onSearchLawFirmsClick}
+          >
+            Search law firms
+          </button>
+          <button
+            className="top-4 right-4 z-10 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg"
+            onClick={getUserLocation}
+          >
+            My Location
+          </button>
+        </div>
+        <div className='flex gap-8'>
           <Map 
             onLawFirmsFound={handleLawFirmsFound} 
             searchBarValue={searchBarValue} 
             isSearchPressed={isSearchPressed} 
             userLocation={userLocation} 
           />
-        </div>
-        <div className='bg-gray-300 w-1/3'>
-          <h3 className='text-xl font-bold pt-20'>Nearby Law Firms:</h3>
-          <ul>
-            {lawFirms.map((firm, index) => (
-              <li key={index} className='py-2'>
-                <h4 className="text-md font-semibold">{firm.name}</h4>
-                <p>{firm.vicinity}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div className='w-1/3'>
+            <h3 className='text-xl font-bold p-4 bg-clio_color'>Nearby Law Firms <span className='font-medium text-sm'> ({lawFirms.length} Found)</span></h3>
+            <ul className='scroll-y-auto h-[590px] overflow-y-auto border border-gray-300'>
+              {lawFirms.map((firm, index) => (
+                <li 
+                  key={index}
+                  className={`py-2 px-4 ${index % 2 === 0 ? 'bg-gray-300 hover:bg-white hover:cursor-pointer' : 'bg-gray-200 hover:bg-white hover:cursor-pointer'} border-b border-gray-300`}
+                >
+                  <h4 className="text-md font-semibold">{firm.name}</h4>
+                  <p>{firm.vicinity}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
       </div>
     </ContentContainer>
   );
