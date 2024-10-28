@@ -1,12 +1,10 @@
-// src/components/Map.js
+import React, { useRef, useState, useCallback, useEffect } from "react";
+import { GoogleMap, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api";
+import { searchNearbyLawFirms } from "../utils/lawFirmSearch";
 
-import React, { useRef, useState, useCallback } from "react";
-import { GoogleMap, StandaloneSearchBox, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api";
-
-// Move the libraries array outside the component to prevent re-creation on each render
 const libraries = ["places"];
 
-const Map = () => {
+const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation }) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries, // Pass the static libraries array
@@ -23,90 +21,81 @@ const Map = () => {
   const [places, setPlaces] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const searchBox = useRef(null);
-  const [searchLocation, setSearchLocation] = useState(null); // Save the location from the search box
 
   // Blue marker icon
   const blueMarkerIcon = {
     url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png", // URL of the blue marker
   };
 
-  // Get user's current location
-  const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          // Center map on user's location
-          setCenter(userLocation);
-          setSearchLocation(userLocation);
-          setMarkers([{ lat: userLocation.lat, lng: userLocation.lng, icon: blueMarkerIcon }]); // Add user location marker with blue icon
-
-          // Search for nearby law firms
-          searchNearbyPlaces(userLocation.lat, userLocation.lng);
-        },
-        () => {
-          alert("Unable to retrieve your location. Please allow location access.");
-        }
-      );
-    } else {
-      alert("Geolocation is not supported by your browser.");
-    }
-  };
-
-  // Search for nearby places
-  const searchNearbyPlaces = (lat, lng) => {
-    const service = new window.google.maps.places.PlacesService(map);
-    const location = new window.google.maps.LatLng(lat, lng);
-
-    const request = {
-      location: location,
-      radius: '500', // Radius in meters
-      type: ['lawyer'], // Google Maps API supports 'lawyer' type for law firms
-    };
-
-    service.nearbySearch(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+  // Effect to update markers when userLocation changes and isSearchPressed is true
+  useEffect(() => {
+    if (isSearchPressed && userLocation) {
+      setCenter(userLocation);
+      setMarkers([{ lat: userLocation.lat, lng: userLocation.lng, icon: blueMarkerIcon }]);
+      searchNearbyLawFirms(map, userLocation.lat, userLocation.lng, (results) => {
         setPlaces(results);
-
-        // Create markers for each place
+        onLawFirmsFound(results);
         const newMarkers = results.map((place) => ({
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
           place: place,
-          icon: null, // Default marker for law firms
+          icon: null,
         }));
         setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
-      }
-    });
-  };
-
-  // Handle places changed event (when a location is searched)
-  const onPlacesChanged = () => {
-    const places = searchBox.current.getPlaces();
-    if (places && places.length > 0) {
-      const place = places[0];
-      const location = place.geometry.location;
-
-      // Update the center with the searched location
-      setSearchLocation({ lat: location.lat(), lng: location.lng() });
-      setCenter({ lat: location.lat(), lng: location.lng() });
-      setMarkers([{ lat: location.lat(), lng: location.lng(), icon: blueMarkerIcon }]); // Add a blue marker for the searched location
+      });
     }
-  };
+  }, [isSearchPressed, userLocation, map, onLawFirmsFound]);
 
-  // Search for law firms based on the current center of the map
-  const onSearchLawFirmsClick = () => {
-    if (searchLocation) {
-      searchNearbyPlaces(searchLocation.lat, searchLocation.lng);
-    } else {
-      alert("Please search for a location first or allow location access.");
+  // Effect to handle search bar input
+  useEffect(() => {
+    if (searchBarValue) {
+      setMarkers([]);
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address: searchBarValue }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const location = results[0].geometry.location;
+          setCenter({ lat: location.lat(), lng: location.lng() });
+          setMarkers([{ lat: location.lat(), lng: location.lng(), icon: blueMarkerIcon }]);
+        }
+      });
     }
-  };
+  }, [searchBarValue]);
+
+  // Effect to handle userLocation changes
+  useEffect(() => {
+    if (userLocation) {
+      setMarkers([]);
+      setCenter(userLocation);
+      setMarkers([{ lat: userLocation.lat, lng: userLocation.lng, icon: blueMarkerIcon }]);
+    }
+  }, [userLocation]);
+
+  // Effect to handle search button pressed
+  useEffect(() => {
+    if (isSearchPressed && searchBarValue) {
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address: searchBarValue }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const location = results[0].geometry.location;
+          setCenter({ lat: location.lat(), lng: location.lng() });
+          setMarkers([{ lat: location.lat(), lng: location.lng(), icon: blueMarkerIcon }]);
+          searchNearbyLawFirms(map, location.lat(), location.lng(), (results) => {
+            setPlaces(results);
+            onLawFirmsFound(results);
+            const newMarkers = results.map((place) => ({
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+              place: place,
+              icon: null,
+            }));
+            setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+          });
+        } else {
+          alert("Location not found. Please try again.");
+        }
+      });
+    }
+  }, [isSearchPressed, searchBarValue, map, onLawFirmsFound]);
 
   // Handle marker click to show info about the place
   const onMarkerClick = (place) => {
@@ -124,30 +113,6 @@ const Map = () => {
 
   return (
     <div className="w-2/3 h-[650px]">
-      <div className="flex items-center z-10 w-full space-x-2 py-4">
-        <StandaloneSearchBox
-          onLoad={(ref) => (searchBox.current = ref)}
-          onPlacesChanged={onPlacesChanged}
-        >
-          <input
-            type="text"
-            placeholder="Search for places..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-          />
-        </StandaloneSearchBox>
-        <button
-          className="bg-dark_green hover:bg-green-500 text-white px-4 py-2 rounded-lg"
-          onClick={onSearchLawFirmsClick}
-        >
-          Search law firms
-        </button>
-        <button
-          className="top-4 right-4 z-10 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg"
-          onClick={getUserLocation}
-        >
-          My Location
-      </button>
-      </div>
       <GoogleMap
         mapContainerClassName="w-full h-full"
         center={center}
@@ -171,7 +136,7 @@ const Map = () => {
               <h3 className="text-lg font-bold">{selectedPlace.name}</h3>
               <p>{selectedPlace.vicinity}</p>
               <p>Rating: {selectedPlace.rating || 'N/A'}</p>
-              <p>{selectedPlace.opening_hours?.open_now ? 'Open' : 'Closed'}</p>
+              <p>{selectedPlace.opening_hours?.isOpen() ? 'Open' : 'Closed'}</p>
             </div>
           </InfoWindow>
         )}
