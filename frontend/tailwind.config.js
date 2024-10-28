@@ -4,8 +4,8 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				clio_color: "#0070E0",
-				dark_green: "#27521b",
+				clio_color: "#137DE8",
+				dark_green: "#387d39",
 				link_color: "#1a237e",
 			},
 		},
