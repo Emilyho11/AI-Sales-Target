@@ -7,13 +7,31 @@ import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
 
 const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   console.log(lawFirm);
+  const [website, setWebsite] = useState('');
+
+  useEffect(() => {
+    const getWebsite = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/get-website?place_id=${lawFirm.place_id}`);
+        console.log('Website:', response.data);
+        if (response.status !== 200) {
+          console.error('Error fetching website:', response.data);
+          return;
+        }
+        setWebsite(response.data);
+      } catch (error) {
+        console.error('Error fetching website:', error.response ? error.response.data : error.message);
+      }
+    }
+
+    getWebsite();
+  }, [lawFirm, handleClosePopup]);
 
   // Call the GetDirections function
   const directionsLink = GetDirections(lawFirm.name);
-  console.log("Directions link:", directionsLink);
 
   return (
-    <div className='bg-gray-300 h-[650px]'>
+    <div className='bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
         <div className='bg-clio_color p-4'>
             <button onClick={handleClosePopup} className='text-black hover:text-black/50 py-2 rounded-lg'>
             <FontAwesomeIcon icon={faArrowLeft} />
@@ -23,15 +41,17 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         {/* {lawFirm.photos && (
           <img src={lawFirm.photos[0].getUrl()} alt={lawFirm.name} className='w-full h-60 object-cover' />
         )} */}
-        <GetImage selectedImage={lawFirm.name} className='h-64' />
+        <div className='h-80 max-h-80'>
+          <GetImage selectedImage={lawFirm.name} className='object-contain w-full h-full' />
+      </div>
         <div className='p-4'>
           <p className='font-bold'>Address: <span className='font-normal'>{lawFirm.vicinity}</span></p>
-          <p>Rating: {lawFirm.rating}</p>
-          {/* {website && (
-            <p>
-              Website: <a href={website} target="_blank" rel="noopener noreferrer">{website}</a>
+          {/* <p>Rating: {lawFirm.rating}</p> */}
+          {website && (
+            <p className='font-bold'>
+              Website: <a className='text-link_color hover:text-blue-500 underline font-normal' href={ website } target='_blank' rel='noreferrer'>{ website }</a>
             </p>
-          )} */}
+          )}
         </div>
         <div className='p-4 grid grid-cols-2 gap-6'>
           <button className='flex gap-4 bg-dark_green hover:bg-green-600 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>

@@ -18,15 +18,6 @@
   overflow-y: scroll;
 }
 
-a {
-  font-weight: 500;
-  color: #D0E4F3;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #54a4fa;
-}
-
 body {
 	margin: 0;
 	min-width: 50vw;

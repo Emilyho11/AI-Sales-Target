@@ -6,7 +6,7 @@ export default {
 			colors: {
 				clio_color: "#137DE8",
 				dark_green: "#387d39",
-				link_color: "#1a237e",
+				link_color: "#0044ff",
 			},
 		},
 	},
