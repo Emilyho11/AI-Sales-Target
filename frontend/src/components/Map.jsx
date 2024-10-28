@@ -43,6 +43,7 @@ const Map = () => {
 
           // Center map on user's location
           setCenter(userLocation);
+          setSearchLocation(userLocation);
           setMarkers([{ lat: userLocation.lat, lng: userLocation.lng, icon: blueMarkerIcon }]); // Add user location marker with blue icon
 
           // Search for nearby law firms
@@ -103,7 +104,7 @@ const Map = () => {
     if (searchLocation) {
       searchNearbyPlaces(searchLocation.lat, searchLocation.lng);
     } else {
-      alert("Please search for a location first.");
+      alert("Please search for a location first or allow location access.");
     }
   };
 
@@ -123,7 +124,7 @@ const Map = () => {
 
   return (
     <div className="w-2/3 h-[650px]">
-      <div className="flex items-center z-10 w-3/4 md:w-1/2 space-x-2">
+      <div className="flex items-center z-10 w-full space-x-2 py-4">
         <StandaloneSearchBox
           onLoad={(ref) => (searchBox.current = ref)}
           onPlacesChanged={onPlacesChanged}
@@ -140,13 +141,13 @@ const Map = () => {
         >
           Search law firms
         </button>
-      </div>
-      <button
-        className="top-4 right-4 z-10 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg"
-        onClick={getUserLocation}
-      >
-        My Location
+        <button
+          className="top-4 right-4 z-10 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg"
+          onClick={getUserLocation}
+        >
+          My Location
       </button>
+      </div>
       <GoogleMap
         mapContainerClassName="w-full h-full"
         center={center}
