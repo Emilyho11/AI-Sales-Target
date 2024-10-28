@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ContentContainer from '../components/ContentContainer';
 import Map from '../components/Map';
 import { StandaloneSearchBox, useLoadScript } from "@react-google-maps/api";
+import PlacesSidePopup from '../components/PlacesSidePopup';
 
 const libraries = ["places"];
 
@@ -16,6 +17,8 @@ const Home = () => {
   const [isSearchPressed, setIsSearchPressed] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const searchBox = useRef(null);
+  const [isClickedToOpen, setIsClickedToOpen] = useState(false);
+  const [selectedLawFirm, setSelectedLawFirm] = useState(null);
 
   const handleLawFirmsFound = (firms) => {
     setLawFirms(firms);
@@ -69,6 +72,17 @@ const Home = () => {
     return <div>Loading Maps</div>;
   }
 
+  const handleOpenPopup = (firm) => {
+    setIsClickedToOpen(true);
+    setSelectedLawFirm(firm);
+  }
+
+  const handleClosePopup = () => {
+    setIsClickedToOpen(false);
+    setSelectedLawFirm(null);
+  }
+
+
   return (
     <ContentContainer>
       <h2>Welcome, Emily Ho</h2>
@@ -98,7 +112,7 @@ const Home = () => {
             My Location
           </button>
         </div>
-        <div className='flex gap-8'>
+        <div className='flex gap-8 pb-10'>
           <Map 
             onLawFirmsFound={handleLawFirmsFound} 
             searchBarValue={searchBarValue} 
@@ -106,19 +120,26 @@ const Home = () => {
             userLocation={userLocation} 
           />
           <div className='w-1/3'>
-            <h3 className='text-xl font-bold p-4 bg-clio_color'>Nearby Law Firms <span className='font-medium text-sm'> ({lawFirms.length} Found)</span></h3>
-            <ul className='scroll-y-auto h-[590px] overflow-y-auto border border-gray-300'>
-              {lawFirms.map((firm, index) => (
-                <li 
-                  key={index}
-                  className={`py-2 px-4 ${index % 2 === 0 ? 'bg-gray-300 hover:bg-white hover:cursor-pointer' : 'bg-gray-200 hover:bg-white hover:cursor-pointer'} border-b border-gray-300`}
-                >
-                  <h4 className="text-md font-semibold">{firm.name}</h4>
-                  <p>{firm.vicinity}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {isClickedToOpen ? (
+              <PlacesSidePopup lawFirm={selectedLawFirm} handleClosePopup={handleClosePopup} />
+            ) : (
+              <>
+                <h3 className='text-xl font-bold p-4 bg-clio_color'>Nearby Law Firms <span className='font-medium text-sm'> ({lawFirms.length} Found)</span></h3>
+                <ul className='scroll-y-auto h-[590px] overflow-y-auto border border-gray-300'>
+                  {lawFirms.map((firm, index) => (
+                    <li 
+                      key={index}
+                      className={`py-2 px-4 ${index % 2 === 0 ? 'bg-gray-300 hover:bg-white hover:cursor-pointer' : 'bg-gray-200 hover:bg-white hover:cursor-pointer'} border-b border-gray-300`}
+                      onClick={() => handleOpenPopup(firm)}
+                    >
+                      <h4 className="text-md font-semibold">{firm.name}</h4>
+                      <p>{firm.vicinity}</p>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+        </div>
       </div>
     </ContentContainer>
   );
