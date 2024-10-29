@@ -40,7 +40,7 @@ const EmailEditor = () => {
             placeholder="Recipient's email"
             value={recipientEmail}
             onChange={handleEmailChange}
-            className='p-2 my-4 border border-gray-300 rounded-lg'
+            className='p-2 my-4 border border-gray-300 bg-white rounded-lg'
           />
           <button 
             className='p-2 my-4 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center' 
