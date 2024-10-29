@@ -7,6 +7,7 @@ import { summarizeContent } from '../utils/AIsummarizer.js';
 import ContentContainer from '../components/ContentContainer';
 import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
 import { faSquareCheck, faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
+import Markdown from 'react-markdown'
 
 const Summary = () => {
   const [comparison, setComparison] = useState('');
@@ -14,6 +15,7 @@ const Summary = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFullSummaryVisible, setIsFullSummaryVisible] = useState(false);
   const [searchParams] = useSearchParams();
   const lawFirmString = searchParams.get('lawFirm');
   const lawFirm = JSON.parse(decodeURIComponent(lawFirmString));
@@ -31,6 +33,7 @@ const Summary = () => {
   //   price_level: 2,
   //   business_status: "Open",
   // }
+  console.log("COMPARISON", comparison);
 
   const directionsLink = GetDirections(lawFirm.name);
 
@@ -72,6 +75,9 @@ const Summary = () => {
     setIsComparisonVisible(!isComparisonVisible);
   };
 
+  const parseDoubleNewLines = (comparison) => comparison.replace(/\n\s*\n/g, '\n');
+  const condensedComparison = parseDoubleNewLines(comparison);
+
   const getStarIcons = (rating) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -86,9 +92,18 @@ const Summary = () => {
     return stars;
   };
 
+  const toggleFullSummary = () => {
+    setIsFullSummaryVisible(!isFullSummaryVisible);
+  };
+
+  const getSummaryPreview = (text) => {
+    const sentences = text.split('. ');
+    return sentences.slice(0, 6).join('. ') + (sentences.length > 6 ? '...' : '');
+  };
+
   return (
     <ContentContainer>
-      <div>
+      <div className='mx-52'>
         <button onClick={handleClosePopup} className='text-link_color hover:text-clio_color py-2 rounded-lg flex gap-4 items-center'>
           <FontAwesomeIcon icon={faArrowLeft} />
           Back
@@ -98,7 +113,7 @@ const Summary = () => {
           <img src={lawFirm.photos[0].getUrl()} alt={lawFirm.name} className='w-full h-60 object-cover' />
         )} */}
           <div className='md:flex gap-12 p-4'>
-            <GetImage selectedImage={lawFirm.name} className='object-contain w-1/3 h-1/3' />
+            <GetImage selectedImage={lawFirm.name} className='object-contain w-1/3 h-1/3 border' />
               <div className='space-y-4'>
                 <div className='flex items-center gap-2'>
                   <FontAwesomeIcon icon={faHouse} className='text-lg' />
@@ -138,13 +153,18 @@ const Summary = () => {
           </div>
           <div className='p-4'>
             <p className='font-bold'>Summary:</p>
-            <p>{summary}</p>
+            <p className='whitespace-pre-wrap'>
+              <Markdown>{isFullSummaryVisible ? summary : getSummaryPreview(summary)}</Markdown>
+            </p>
+            <button onClick={toggleFullSummary} className='text-link_color hover:text-clio_color underline'>
+              {isFullSummaryVisible ? 'View Less' : 'View More'}
+            </button>
             <div className='relative'>
               <button
               className='flex gap-2 py-2 hover:text-clio_color text-link_color justify-center items-center'
               onClick={clioCompare}
               >
-                Compare with Clio
+                How can Clio help?
                 <FontAwesomeIcon icon={faSquareCheck} />
                 <FontAwesomeIcon icon={isComparisonVisible ? faChevronUp : faChevronDown} />
               </button>
@@ -155,7 +175,7 @@ const Summary = () => {
               )}
               {isComparisonVisible && comparison && (
                 <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg'>
-                  <p>{comparison}</p>
+                  <p className='whitespace-pre-wrap'><Markdown>{condensedComparison}</Markdown></p>
                 </div>
               )}
             </div>

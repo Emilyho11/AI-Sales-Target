@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GetImage from './GetImage'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock, faHouse, faPhone, faDollarSign, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
@@ -54,8 +54,6 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
 
   // Call the GetDirections function
   const directionsLink = GetDirections(lawFirm.name);
-  console.log("Email:", email);
-  console.log("Phone:", phone);
 
   const getStarIcons = (rating) => {
     const stars = [];
@@ -107,23 +105,38 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         <div className='h-80 max-h-80'>
           <GetImage selectedImage={lawFirm.name} className='object-contain w-full h-full border border-gray-300' />
       </div>
-        <div className='p-4'>
-          {lawFirm.rating && (
-            <p className='font-bold'>Rating: <span className='font-normal'>{getStarIcons(lawFirm.rating)}</span></p>
-          )}
-          <p className='font-bold'>Address: <span className='font-normal'>{lawFirm.vicinity}</span></p>
+        <div className='p-4 space-y-2'>
+        <div className='flex items-center gap-2'>
+            <FontAwesomeIcon icon={faHouse} className='text-lg' />
+            <p className='font-bold'>Address: <span className='font-normal'>{lawFirm.vicinity}</span></p>
+          </div>
           {phone && (
             <div className='flex items-center gap-2'>
+              <FontAwesomeIcon icon={faPhone} className='text-lg' />
               <p className='font-bold'>Phone: <span className='font-normal'>{phone}</span></p>
             </div>
           )}
           {email && (
             <div className='flex items-center gap-2'>
+              <FontAwesomeIcon icon={faEnvelope} className='text-lg' />
               <p className='font-bold'>Email: <span className='font-normal'>{email}</span></p>
+            </div>
+          )}
+          {lawFirm.rating && (
+            <div className='flex items-center gap-2'>
+              <FontAwesomeIcon icon={faStar} className="text-lg" />
+              <p className='font-bold'>Rating: <span className='font-normal'>{getStarIcons(lawFirm.rating)}</span></p>
+            </div>
+          )}
+          {lawFirm.price_level && (
+            <div className='flex items-center gap-4'>
+              <FontAwesomeIcon icon={faDollarSign} className="text-lg" />
+              <p className='font-bold'>Price Level: <span className='font-normal'>{lawFirm.price_level}</span></p>
             </div>
           )}
           {website && (
             <p className='font-bold'>
+              <FontAwesomeIcon icon={faGlobe} className="text-lg mr-3" />
               Website: <a className='text-link_color hover:text-clio_color underline font-normal' href={ website } target='_blank' rel='noreferrer'>{ website }</a>
             </p>
           )}
@@ -148,9 +161,12 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
           )}
         </div>
         <div className='p-4 grid grid-cols-2 gap-6'>
-          <button className='flex gap-4 bg-dark_green hover:bg-green-600 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
-            Directions
-            <FontAwesomeIcon icon={faExternalLink} className='mr-2' />
+          <button
+            className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center'
+            onClick={handleNavigateAndSummarize}
+          >
+            More Information
+            <FontAwesomeIcon icon={faInfoCircle} className='mr-2' />
           </button>
           <button className='flex gap-4 bg-[#E35447] hover:bg-[#e87e74] text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
             Send Email
@@ -160,12 +176,9 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             Create Pitch
             <FontAwesomeIcon icon={faPlus} className='mr-2' />
           </button>
-          <button
-            className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center'
-            onClick={handleNavigateAndSummarize}
-          >
-            More Information
-            <FontAwesomeIcon icon={faInfoCircle} className='mr-2' />
+          <button className='flex gap-4 bg-dark_green hover:bg-green-600 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
+            Directions
+            <FontAwesomeIcon icon={faExternalLink} className='mr-2' />
           </button>
         </div>
     </div>

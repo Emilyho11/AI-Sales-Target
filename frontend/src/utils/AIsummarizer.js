@@ -21,9 +21,9 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
 
     let prompt = '';
     if (promptType === "clio_compare") {
-        prompt = `Write points of how Clio can help the following company. Tailor it to the law firm: ${websiteUrl}`;
+        prompt = `What services can Clio offer and help for the following company. Tailor it to the law firm: ${websiteUrl}. Not too much white spaces`;
     } else if (promptType === "firm_summary") {
-        prompt = `Summarize ${websiteUrl} and give me information about the company (anything related to law, what software they use, number of employees, email and phone number, their strengths and weaknesses, etc.). Don't give me their address.`;
+        prompt = `Summarize ${websiteUrl} and give me information about the company (anything related to law, what software they use, number of employees, email and phone number, their strengths and weaknesses, etc.). Don't give me their address. Make it sound like a professional summary.`;
     } else if (promptType === "pitch") {
         prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}`;
     }

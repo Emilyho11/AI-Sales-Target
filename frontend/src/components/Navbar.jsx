@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faBook, faSignOutAlt, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faSignOutAlt, faBars, faPen } from "@fortawesome/free-solid-svg-icons";
 import ClioLogo from '../assets/clio-logo.png'
 
 const Navbar = () => {
@@ -9,13 +9,13 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const myLinks = [
     { name: 'Home', url: '/', icon: faHouse },
-    { name: 'My Library', url: '/myLibrary', icon: faBook },
+    { name: 'Email Builder', url: '/emailEditor', icon: faPen },
     { name: 'Logout', url: '/logout', icon: faSignOutAlt },
   ]
 
   return (
     <header className='header flex w-full h-[72px] bg-gray-200 relative shadow z-10'>
-      <div className='flex items-center ml-16'>
+      <div className='flex items-center ml-24'>
         <img src={ClioLogo} alt='Clio Logo' className='w-[135px] h-[50px]' />
       </div>
       <div className="m-4 mr-32 absolute top-5 right-0 gap-14 text-base hidden lg:flex">
