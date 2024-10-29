@@ -25,7 +25,9 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
     } else if (promptType === "firm_summary") {
         prompt = `Summarize ${websiteUrl} and give me information about the company (anything related to law, what software they use, number of employees, email and phone number, their strengths and weaknesses, etc.). Don't give me their address. Make it sound like a professional summary.`;
     } else if (promptType === "pitch") {
-        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}`;
+        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Don't make it sound like you are responding to me.`;
+    } else if (promptType === "percentage") {
+        prompt = `What are the chances that the law firm ${websiteUrl} buys or goes for Clio software? Write a percentage.`;
     }
 
     const selectedModel = modelType === "gpt-4o" ? "gpt-4o" : "gpt-4";

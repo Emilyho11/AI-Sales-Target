@@ -179,7 +179,7 @@ const Summary = () => {
                 </div>
               )}
             </div>
-            <div className='p-4 grid grid-cols-2 gap-6 w-1/3'>
+            <div className='pt-8 grid grid-cols-3 gap-4 w-1/3'>
             <button className='flex gap-4 bg-dark_green hover:bg-green-600 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
               Directions
               <FontAwesomeIcon icon={faExternalLink} className='mr-2' />

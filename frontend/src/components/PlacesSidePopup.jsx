@@ -7,12 +7,15 @@ import axios from 'axios';
 import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
 import { useNavigate } from 'react-router-dom';
 import { summarizeContent } from '../utils/AIsummarizer.js';
+import PitchPopup from './PitchPopup';
 
 const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   const [website, setWebsite] = useState('');
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [isPitchPopupVisible, setIsPitchPopupVisible] = useState(false);
+  const [pitch, setPitch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,12 +82,42 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
     }
   };
 
+  const createPitch = async () => {
+    try {
+      const pitch = await summarizeContent(website, "pitch", "gpt-4o");
+      return pitch;
+    } catch (error) {
+      console.error('Error:', error);
+      return '';
+    }
+  };
+
   const handleNavigateAndSummarize = async () => {
     setLoading(true);
     const summary = await summarize();
     const lawFirmString = encodeURIComponent(JSON.stringify(lawFirm));
     navigate(`/summarizer?lawFirm=${lawFirmString}&website=${encodeURIComponent(website)}&summary=${encodeURIComponent(summary)}`);
   };
+
+  const handleCreatePitch = async () => {
+    setLoading(true);
+    const generatePitch = await createPitch();
+    setPitch(generatePitch);
+    setIsPitchPopupVisible(true);
+    setLoading(false);
+  };
+
+  const handleClosePitchPopup = () => {
+    setIsPitchPopupVisible(false);
+  };
+
+  if (isPitchPopupVisible) {
+    return (
+      <div className='flex z-50 bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
+        <PitchPopup lawFirm={lawFirm} pitch={pitch} onClose={handleClosePitchPopup} />
+      </div>
+    );
+  }
 
   return (
     <div className='bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
@@ -172,7 +205,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             Send Email
             <FontAwesomeIcon icon={faEnvelope} className='mr-2' />
           </button>
-          <button className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
+          <button className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center' onClick={handleCreatePitch}>
             Create Pitch
             <FontAwesomeIcon icon={faPlus} className='mr-2' />
           </button>

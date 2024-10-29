@@ -34,14 +34,27 @@ const EmailEditor = () => {
   return (
     <ContentContainer>
       <div>
-        <ReactQuill value={editorContent} onChange={handleEditorChange} />
-        <input
-          type="email"
-          placeholder="Recipient's email"
-          value={recipientEmail}
-          onChange={handleEmailChange}
+        <div className='flex gap-6'>
+          <input
+            type="email"
+            placeholder="Recipient's email"
+            value={recipientEmail}
+            onChange={handleEmailChange}
+            className='p-2 my-4 border border-gray-300 rounded-lg'
+          />
+          <button 
+            className='p-2 my-4 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center' 
+            onClick={handleSave}
+          >
+            Save and Send
+          </button>
+        </div>
+        <ReactQuill
+          theme="snow"
+          value={editorContent}
+          onChange={handleEditorChange}
+          className='h-96'
         />
-        <button onClick={handleSave}>Save and Send</button>
       </div>
     </ContentContainer>
   );
