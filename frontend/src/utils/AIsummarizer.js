@@ -24,6 +24,8 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
         prompt = `Write points of how Clio can help the following company. Tailor it to the law firm: ${websiteUrl}`;
     } else if (promptType === "firm_summary") {
         prompt = `Summarize ${websiteUrl} and give me information about the company (anything related to law, what software they use, number of employees, email and phone number, their strengths and weaknesses, etc.). Don't give me their address.`;
+    } else if (promptType === "pitch") {
+        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}`;
     }
 
     const selectedModel = modelType === "gpt-4o" ? "gpt-4o" : "gpt-4";
@@ -50,7 +52,7 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
     }
 }
 
-// // Sample usage
+// Sample usage
 // const baseUrl = 'https://accordlaw.ca/';
 
 // // Use "clio" prompt with "gpt-4o"
@@ -61,4 +63,9 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
 // // Use "general" prompt with "gpt-4"
 // summarizeContent(baseUrl, "firm_summary", "gpt-4").then((summary) => {
 //     console.log("General Summary (GPT-4):", summary);
+// });
+
+// // Use "pitch" prompt with "gpt-4o"
+// summarizeContent(baseUrl, "pitch", "gpt-4o").then((summary) => {
+//     console.log("Pitch Summary (GPT-4o):", summary);
 // });
