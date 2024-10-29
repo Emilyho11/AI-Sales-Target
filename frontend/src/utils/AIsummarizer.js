@@ -14,23 +14,23 @@ const MAX_TOKENS = 1000;
  * @param {string} modelType - The model to use ("gpt-4" or "gpt-4o").
  * @returns {string} - The summarized content or "N/A" if URL is invalid.
  */
-export async function summarizeContent(websiteUrl, promptType = "general", modelType = "gpt-4") {
+export async function summarizeContent(websiteUrl, promptType = "general", modelType) {
     if (!websiteUrl) {
         return "N/A";
     }
 
     let prompt = '';
     if (promptType === "clio_compare") {
-        prompt = `What services can Clio offer and help for the following company. Tailor it to the law firm: ${websiteUrl}. Not too much white spaces`;
+        prompt = `What specific services/software can Clio offer to support the law firm ${websiteUrl}? Focus on relevant features that align with the firm's needs. Please tailor the response to that specific law firm.`;
     } else if (promptType === "firm_summary") {
-        prompt = `Summarize ${websiteUrl} and give me information about the company (anything related to law, what software they use, number of employees, email and phone number, their strengths and weaknesses, etc.). Don't give me their address. Make it sound like a professional summary.`;
+        prompt = `Summarize the website at ${websiteUrl} with a professional overview of the company, focusing on its legal services, software usage, employee count, strengths, and challenges. Include insights from any available trends report, analyzing company growth, market position, or industry challenges if possible. Exclude any address or contact information, and get to the point. If it doesn't have information on a certain part, you can skip it.`;
     } else if (promptType === "pitch") {
-        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Don't make it sound like you are responding to me.`;
+        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Address the company by name.`;
     } else if (promptType === "percentage") {
-        prompt = `What are the chances that the law firm ${websiteUrl} buys or goes for Clio software? Write a percentage.`;
+        prompt = `Given the current trends in law firm technology adoption, cloud-based software advantages, and recent developments in ${websiteUrl}, predict the likelihood (as a percentage) that ${websiteUrl} will choose to adopt Clio software and become their client. Factors to consider include the benefits of Clio's cloud-based solutions, current market demands for legal tech, client needs, and the potential cost-efficiency advantages for ${websiteUrl}. Provide only a percentage as the answer.`;
     }
 
-    const selectedModel = modelType === "gpt-4o" ? "gpt-4o" : "gpt-4";
+    const selectedModel = modelType;
 
     while (true) {
         try {

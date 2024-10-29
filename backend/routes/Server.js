@@ -57,7 +57,7 @@ async function extractContactInfo(baseUrl) {
       const phoneNumbers = [];
 
       // Extract email addresses
-      const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+      const emailRegex = /\b[A-Za-z._%+-][A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
       const pageText = $('body').text();
       const emailMatches = pageText.match(emailRegex);
       if (emailMatches) {
