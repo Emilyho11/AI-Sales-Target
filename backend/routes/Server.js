@@ -1,10 +1,10 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const cheerio = require('cheerio');
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
+import express from 'express';
+import axios from 'axios';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import * as cheerio from 'cheerio';
+import bodyParser from 'body-parser';
+import { sendEmail } from '../api_calls/SendEmail.js';
 
 // Load environment variables from .env file
 dotenv.config({ path: '../.env' });
@@ -94,35 +94,19 @@ app.get('/api/scrape-contact-info', async (req, res) => {
   }
 });
 
-// Route to send an email
-app.post('/api/send-email', async (req, res) => {
-  const { to, content } = req.body;
+app.post('/api/send-email', (req, res) => {
+  const { subject, text, to, from } = req.body;
 
-  if (!to || !content) {
-    return res.status(400).send('Missing "to" or "content" in request body');
+  if (!subject || !text || !to || !from) {
+    return res.status(400).json({ error: 'All fields (subject, text, to, from) are required' });
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to,
-    subject: 'Email from React Quill Editor',
-    text: content,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).send('Email sent successfully');
+    sendEmail(subject, text, to, from);
+    res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).send('Failed to send email');
+    console.error('Sending email failed:', error.message);
+    res.status(500).json({ error: 'Sending email failed' });
   }
 });
 

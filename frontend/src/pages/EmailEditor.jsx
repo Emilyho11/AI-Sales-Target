@@ -4,9 +4,10 @@ import 'react-quill/dist/quill.snow.css';
 import ContentContainer from '../components/ContentContainer';
 import axios from 'axios';
 
-const EmailEditor = () => {
+const EmailEditor = ({ sender }) => {
   const [editorContent, setEditorContent] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
 
   const handleEditorChange = (content) => {
     setEditorContent(content);
@@ -17,16 +18,19 @@ const EmailEditor = () => {
   };
 
   const handleSave = async () => {
+    const emailData = {
+      subject: "TESTING Subject",
+      text: editorContent,
+      to: recipientEmail,
+      from: "emily.ho@clio.com",
+    };
+  
     try {
-      const response = await axios.post('/api/send-email', {
-        to: recipientEmail,
-        content: editorContent,
-      });
+      const response = await axios.post(`http://localhost:3000/api/send-email`, emailData);
       console.log('Email sent:', response.data);
-      alert('Email sent successfully!');
-    }
-    catch (error) {
-      console.error('Error sending email:', error);
+      alert('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error.message);
       alert('Failed to send email');
     }
   };
