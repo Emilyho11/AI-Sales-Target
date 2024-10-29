@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import bodyParser from 'body-parser';
 import { sendEmail } from '../api_calls/SendEmail.js';
+import path from 'path';
+import fs from 'fs';
 
 // Load environment variables from .env file
 dotenv.config({ path: '../.env' });
@@ -95,19 +97,37 @@ app.get('/api/scrape-contact-info', async (req, res) => {
 });
 
 app.post('/api/send-email', (req, res) => {
-  const { subject, text, to, from } = req.body;
+  const { subject, text, to, from, name } = req.body;
 
   if (!subject || !text || !to || !from) {
     return res.status(400).json({ error: 'All fields (subject, text, to, from) are required' });
   }
 
   try {
-    sendEmail(subject, text, to, from);
+    sendEmail(subject, text, to, from, name);
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Sending email failed:', error.message);
     res.status(500).json({ error: 'Sending email failed' });
   }
+});
+
+// Route to serve the HTML template
+app.get('/api/email-template', (req, res) => {
+  const name = req.query.name; // Get the name from query parameters
+  const templatePath = '../../frontend/src/assets/email_template.html';
+
+  fs.readFile(templatePath, 'utf8', (err, template) => {
+    if (err) {
+      console.error('Error reading email template:', err.message);
+      return res.status(500).json({ error: 'Failed to load email template' });
+    }
+
+    const htmlContent = template.replace('{{name}}', name || ''); // Replace placeholder with name
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(htmlContent);
+  });
 });
 
 app.listen(port, () => {

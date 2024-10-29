@@ -3,6 +3,7 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 // Load environment variables from .env file
 dotenv.config({ path: '../.env' });
@@ -11,14 +12,17 @@ app.use(cors());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-export function sendEmail(subject, text, to, from) {
-  
+export function sendEmail(subject, text, to, from, name) {
+  const templatePath = '../../frontend/src/assets/email_template.html';
+  const template = fs.readFileSync(templatePath, 'utf8'); // Read HTML file
+  const htmlContent = template.replace('{{name}}', name); // Replace placeholder
+
   const msg = {
     to: to, // recipient
     from: from, // verified sender
     subject: subject,
     text: text,
-    html: `<strong>${text}</strong>`,
+    html: htmlContent,
   }
   
   sgMail
