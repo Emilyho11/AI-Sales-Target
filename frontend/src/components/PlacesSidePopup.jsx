@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import GetImage from './GetImage'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEnvelope, faExternalLink, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
+import { useNavigate } from 'react-router-dom';
+import { summarizeContent } from '../utils/AIsummarizer.js';
 
 const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
-  console.log(lawFirm);
   const [website, setWebsite] = useState('');
+  // const [summary, setSummary] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getWebsite = async () => {
@@ -30,6 +34,40 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   // Call the GetDirections function
   const directionsLink = GetDirections(lawFirm.name);
 
+  const getStarIcons = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < Math.floor(rating)) {
+        stars.push(<FontAwesomeIcon key={i} icon={faStar} className="inline-block w-4 h-4 text-yellow-500" />);
+      } else if (i < rating) {
+        stars.push(<FontAwesomeIcon key={i} icon={faStarHalfAlt} className="inline-block w-4 h-4 text-yellow-500" />);
+      } else {
+        stars.push(<FontAwesomeIcon key={i} icon={regularStar} className="inline-block w-4 h-4 text-yellow-500" />);
+      }
+    }
+    return stars;
+  };
+
+  const summarize = async () => {
+    try {
+      const summary = await summarizeContent(website, "firm_summary", "gpt-4");
+      return summary;
+    } catch (error) {
+      console.error('Error:', error);
+      return '';
+    }
+  };
+
+  useEffect(() => {
+    summarize();
+  }, [lawFirm]);
+
+  const handleNavigateAndSummarize = async () => {
+    const lawFirmString = encodeURIComponent(JSON.stringify(lawFirm));
+    const summary = await summarize();
+    navigate(`/summarizer?lawFirm=${lawFirmString}&website=${encodeURIComponent(website)}&summary=${encodeURIComponent(summary)}`);
+  };
+
   return (
     <div className='bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
         <div className='bg-clio_color p-4'>
@@ -45,12 +83,34 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
           <GetImage selectedImage={lawFirm.name} className='object-contain w-full h-full' />
       </div>
         <div className='p-4'>
+          {lawFirm.rating && (
+            <p className='font-bold'>Rating: <span className='font-normal'>{getStarIcons(lawFirm.rating)}</span></p>
+          )}
           <p className='font-bold'>Address: <span className='font-normal'>{lawFirm.vicinity}</span></p>
           {/* <p>Rating: {lawFirm.rating}</p> */}
           {website && (
             <p className='font-bold'>
               Website: <a className='text-link_color hover:text-blue-500 underline font-normal' href={ website } target='_blank' rel='noreferrer'>{ website }</a>
             </p>
+          )}
+          {lawFirm.opening_hours && lawFirm.opening_hours.weekday_text && (
+            <div className='flex gap-2'>
+              <FontAwesomeIcon icon={faClock} className="text-lg pt-1 pr-1" />
+              <div>
+                <p className={`font-bold ${lawFirm.business_status === 'Open' ? 'text-green-500' : 'text-red-500'}`}>
+                  {lawFirm.business_status}
+                </p>
+                  
+                <p className='font-bold'>
+                  Hours:
+                </p>
+                <ul className='list-disc pl-4'>
+                  {lawFirm.opening_hours.weekday_text.map((hours, index) => (
+                    <li key={index}>{hours}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           )}
         </div>
         <div className='p-4 grid grid-cols-2 gap-6'>
@@ -66,7 +126,10 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             Create Pitch
             <FontAwesomeIcon icon={faPlus} className='mr-2' />
           </button>
-          <button className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
+          <button
+            className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center'
+            onClick={handleNavigateAndSummarize}
+          >
             More Information
             <FontAwesomeIcon icon={faInfoCircle} className='mr-2' />
           </button>
