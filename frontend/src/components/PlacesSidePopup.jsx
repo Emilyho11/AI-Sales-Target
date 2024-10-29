@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import GetImage from './GetImage';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock, faHouse, faPhone, faDollarSign, faGlobe, faChevronUp, faChevronDown, faCheck, faGauge, faMeteor, faChartLine, faHandshake } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock, faHouse, faPhone, faDollarSign, faGlobe, faChevronUp, faChevronDown, faCheck, faGauge, faMeteor, faChartLine, faHandshake, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faSquareCheck, faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
@@ -176,18 +176,11 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
     );
   }
 
-  const parseDoubleNewLines = (comparison) => comparison.replace(/\n\s*\n/g, '\n');
+  const parseDoubleNewLines = (text) => text.replace(/\n\s*\n/g, '\n');
   const condensedComparison = parseDoubleNewLines(comparison);
 
   return (
     <div className='bg-gray-300 h-[650px] scroll-y-auto overflow-auto relative'>
-      {loadingPitch && (
-        <div className='absolute inset-0 flex items-center justify-center bg-gray-300 bg-opacity-75 z-50'>
-          <div className='p-4 bg-white border rounded shadow-lg'>
-            <p>Loading...</p>
-          </div>
-        </div>
-      )}
       <div className='bg-clio_color p-4'>
         <button onClick={handleClosePopup} className='text-black hover:text-black/50 py-2 rounded-lg'>
           <FontAwesomeIcon icon={faArrowLeft} />
@@ -202,7 +195,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         <GetImage selectedImage={lawFirm.name} className='object-contain w-full h-full border border-gray-300' />
       </div>
       )}
-      <div className='p-4 space-y-2'>
+      <div className='pl-6 pt-6 space-y-2'>
         <div className='flex items-center gap-2'>
           <FontAwesomeIcon icon={faHouse} className='text-lg' />
           <p className='font-bold'>Address: <span className='font-normal'>{lawFirm.vicinity}</span></p>
@@ -243,7 +236,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         </p>
 
       </div>
-      <div className='p-4'>
+      <div className='p-6'>
         <div className='relative'>
           <button
             className='flex gap-2 py-2 hover:text-clio_color text-link_color justify-center items-center'
@@ -253,12 +246,13 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             <FontAwesomeIcon icon={isSummaryVisible ? faChevronUp : faChevronDown} />
           </button>
           {loadingSummary && summary === '' && (
-            <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg'>
-              <p>Loading...</p>
+            <div className='p-4 bg-gray-100 border rounded shadow-lg flex gap-4 items-center'>
+              <p>Loading</p>
+              <FontAwesomeIcon icon={faSpinner} spin />
             </div>
           )}
           {isSummaryVisible && summary && (
-            <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg'>
+            <div className='p-4 bg-gray-100 border rounded shadow-lg'>
               <p className='whitespace-pre-wrap'><Markdown>{isFullSummaryVisible ? summary : getTextPreview(summary)}</Markdown></p>
               <div className='flex justify-between items-center mt-2'>
                 <button onClick={toggleFullSummary} className='text-link_color hover:text-clio_color underline'>
@@ -285,14 +279,15 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             <FontAwesomeIcon icon={isComparisonVisible ? faChevronUp : faChevronDown} />
           </button>
           {loadingComparison && comparison === '' && (
-            <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg'>
-              <p>Loading...</p>
+            <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg flex gap-4 items-center'>
+              <p>Loading</p>
+              <FontAwesomeIcon icon={faSpinner} spin />
             </div>
           )}
           {isComparisonVisible && comparison && (
             <div className='mt-2 p-4 bg-gray-100 border rounded shadow-lg'>
               <p className='whitespace-pre-wrap'>
-                <Markdown>{isFullComparisonVisible ? comparison : getTextPreview(condensedComparison)}</Markdown>
+                <Markdown>{isFullComparisonVisible ? condensedComparison : getTextPreview(condensedComparison)}</Markdown>
               </p>
               <div className='flex justify-between items-center mt-2'>
                 <button onClick={toggleFullComparison} className='text-link_color hover:text-clio_color underline'>
@@ -309,21 +304,23 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
           )}
         </div>
       </div>
-      <div className='p-4 grid grid-cols-2 gap-6'>
-        <button
-          className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center'
-          onClick={handleSummarize}
-        >
-          More Information
-          <FontAwesomeIcon icon={faInfoCircle} className='mr-2' />
-        </button>
+      <div className='px-6 grid grid-cols-3 gap-4 pb-10'>
         <button className='flex gap-4 bg-[#E35447] hover:bg-[#e87e74] text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
           Send Email
           <FontAwesomeIcon icon={faEnvelope} className='mr-2' />
         </button>
-        <button className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center' onClick={handleCreatePitch}>
-          Create Pitch
-          <FontAwesomeIcon icon={faPlus} className='mr-2' />
+        <button className='flex gap-4 bg-clio_color hover:bg-blue-400 text-white rounded-lg py-2 justify-center items-center' onClick={handleCreatePitch} disabled={loadingPitch}>
+          {loadingPitch ? (
+            <>
+              <FontAwesomeIcon icon={faSpinner} spin className='mr-2' />
+              Creating Pitch...
+            </>
+          ) : (
+            <>
+              Create Pitch
+              <FontAwesomeIcon icon={faPlus} className='mr-2' />
+            </>
+          )}
         </button>
         <button className='flex gap-4 bg-dark_green hover:bg-green-600 text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
           Directions

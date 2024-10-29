@@ -1,10 +1,11 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import { GoogleMap, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api";
 import { searchNearbyLawFirms } from "../utils/lawFirmSearch";
+import PlacesSidePopup from "./PlacesSidePopup";
 
 const libraries = ["places"];
 
-const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation }) => {
+const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation, onLawFirmSelect }) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries, // Pass the static libraries array
@@ -101,7 +102,11 @@ const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation })
 
   // Handle marker click to show info about the place
   const onMarkerClick = (place) => {
-    setSelectedPlace(place);
+    // Only set selectedPlace if it's not already the clicked place
+    if (place && selectedPlace?.place_id !== place.place_id) {
+      setSelectedPlace(place);
+      onLawFirmSelect(place); // Send the selected place back to Home.jsx
+    }
   };
 
   // On map load, set map instance

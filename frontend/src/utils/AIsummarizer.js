@@ -21,11 +21,11 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
 
     let prompt = '';
     if (promptType === "clio_compare") {
-        prompt = `What specific services/software can Clio offer to support the law firm ${websiteUrl}? Focus on relevant features that align with the firm's needs. Please tailor the response to that specific law firm.`;
+        prompt = `What specific services/software can Clio offer to support the law firm ${websiteUrl}? Focus on relevant software that align with the firm's needs. Please tailor the response to that specific law firm, and avoid too much white space.`;
     } else if (promptType === "firm_summary") {
-        prompt = `Summarize the website at ${websiteUrl} with a professional overview of the company, focusing on its legal services, software usage, employee count, strengths, and challenges. Include insights from any available trends report, analyzing company growth, market position, or industry challenges if possible. Exclude any address or contact information, and get to the point. If it doesn't have information on a certain part, you can skip it.`;
+        prompt = `Summarize the website at ${websiteUrl} with a professional overview of the company, focusing on its legal services, software usage, employee count, strengths, and challenges. Include insights from any available trends report, analyzing company growth, market position, or industry challenges if possible. Exclude any address or contact information, and get to the point. If it doesn't have information on a certain part, you can skip it and avoid saying it was not found on the website or the website itself. Use company name.`;
     } else if (promptType === "pitch") {
-        prompt = `Write a pitch to sell Clio Law to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Address the company by name.`;
+        prompt = `Write a pitch to sell Clio's services/software to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Address the company by name.`;
     } else if (promptType === "percentage") {
         prompt = `Given the current trends in law firm technology adoption, cloud-based software advantages, and recent developments in ${websiteUrl}, predict the likelihood (as a percentage) that ${websiteUrl} will choose to adopt Clio software and become their client. Factors to consider include the benefits of Clio's cloud-based solutions, current market demands for legal tech, client needs, and the potential cost-efficiency advantages for ${websiteUrl}. Provide only a percentage as the answer.`;
     }

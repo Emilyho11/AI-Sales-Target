@@ -5,14 +5,6 @@ import { StandaloneSearchBox, useLoadScript } from "@react-google-maps/api";
 import PlacesSidePopup from '../components/PlacesSidePopup';
 
 const libraries = ["places"];
-const temp = {
-  name: 'Clio Software Company',
-  vicinity: '1234 Main St, Vancouver, BC',
-  rating: 4.5,
-  formatted_phone_number: '123-456-7890',
-  
-}
-const temp2 = true;
 
 const Home = () => {
   const { isLoaded, loadError } = useLoadScript({
@@ -30,6 +22,11 @@ const Home = () => {
 
   const handleLawFirmsFound = (firms) => {
     setLawFirms(firms);
+  };
+
+  const handleLawFirmSelect = (lawFirm) => {
+    setSelectedLawFirm(lawFirm);
+    setIsClickedToOpen(true); // Open the popup when a law firm is selected
   };
 
   const getUserLocation = () => {
@@ -56,7 +53,6 @@ const Home = () => {
     const places = searchBox.current.getPlaces();
     if (places && places.length > 0) {
       const place = places[0];
-      const location = place.geometry.location;
       setSearchBarValue(place.formatted_address); // Set the searchBarValue as a string
       setUserLocation(null); // Reset user location when a place is searched
     }
@@ -83,17 +79,12 @@ const Home = () => {
   const handleOpenPopup = (firm) => {
     setIsClickedToOpen(true);
     setSelectedLawFirm(firm);
-  }
+  };
 
   const handleClosePopup = () => {
     setIsClickedToOpen(false);
     setSelectedLawFirm(null);
-  }
-
-  const testing = () => {
-    setIsClickedToOpen(true);
-    setSelectedLawFirm(temp);
-  }
+  };
   
   return (
     <ContentContainer>
@@ -129,7 +120,8 @@ const Home = () => {
             onLawFirmsFound={handleLawFirmsFound} 
             searchBarValue={searchBarValue} 
             isSearchPressed={isSearchPressed} 
-            userLocation={userLocation} 
+            userLocation={userLocation}
+            onLawFirmSelect={handleLawFirmSelect}
           />
           <div className='w-1/3'>
             {/* <button onClick={testing}>Test</button> */}
