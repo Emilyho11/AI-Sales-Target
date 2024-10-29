@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Library from './pages/Library';
+import EmailEditor from './pages/EmailEditor';
 import Footer from './components/Footer';
 import Summary from './pages/Summary';
 
@@ -14,7 +14,7 @@ function App() {
         <div className="flex-grow bg-white">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/myLibrary" element={<Library />} />
+            <Route path="/emailEditor" element={<EmailEditor />} />
             <Route path="/summarizer" element={<Summary />} />
           </Routes>
         </div>

@@ -3,6 +3,8 @@ const axios = require('axios');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cheerio = require('cheerio');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 // Load environment variables from .env file
 dotenv.config({ path: '../.env' });
@@ -10,6 +12,7 @@ dotenv.config({ path: '../.env' });
 const app = express();
 const port = 3000;
 app.use(cors());
+app.use(bodyParser.json());
 
 const apiKey = process.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!apiKey) {
@@ -17,6 +20,7 @@ if (!apiKey) {
   process.exit(1); // Exit the process if the API key is not found
 }
 
+// Route to get the website URL from a Google Places API place_id
 app.get('/api/get-website', async (req, res) => {
   const placeId = req.query.place_id; // Getting place_id from query params
 
@@ -53,7 +57,7 @@ async function extractContactInfo(baseUrl) {
       const phoneNumbers = [];
 
       // Extract email addresses
-      const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+      const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
       const pageText = $('body').text();
       const emailMatches = pageText.match(emailRegex);
       if (emailMatches) {
@@ -61,10 +65,10 @@ async function extractContactInfo(baseUrl) {
       }
 
       // Extract phone numbers (simple regex for demonstration purposes)
-      const phoneRegex = /(\+?\d{1,4}[\s-])?(?:\(?\d{3}\)?[\s-]?)?\d{3}[\s-]?\d{4}/g;
+      const phoneRegex = /(?:\d{3}[-.]?){2}\d{4}|\(\d{3}\) \d{3}-\d{4}/g;
       const phoneMatches = pageText.match(phoneRegex);
       if (phoneMatches) {
-          phoneNumbers.push(...phoneMatches);
+        phoneNumbers.push(...phoneMatches);
       }
 
       return { emails, phoneNumbers };
@@ -74,6 +78,7 @@ async function extractContactInfo(baseUrl) {
   }
 }
 
+// Route to scrape contact information from a website
 app.get('/api/scrape-contact-info', async (req, res) => {
   const { url } = req.query;
   if (!url) {
@@ -86,6 +91,38 @@ app.get('/api/scrape-contact-info', async (req, res) => {
   } catch (error) {
     console.error('Error scraping contact info:', error.message);
     res.status(500).json({ error: 'Failed to scrape contact info' });
+  }
+});
+
+// Route to send an email
+app.post('/api/send-email', async (req, res) => {
+  const { to, content } = req.body;
+
+  if (!to || !content) {
+    return res.status(400).send('Missing "to" or "content" in request body');
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject: 'Email from React Quill Editor',
+    text: content,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).send('Failed to send email');
   }
 });
 
