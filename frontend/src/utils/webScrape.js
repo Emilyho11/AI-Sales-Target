@@ -54,7 +54,7 @@ async function extractPageInfo(baseUrl) {
 }
 
 // Function to scrape the website and collect all text info
-async function scrapeWebsite(baseUrl, visited = new Set(), collectedData = []) {
+ export async function scrapeWebsite(baseUrl, visited = new Set(), collectedData = []) {
     try {
         // Fetch the page content and extract the info
         const pageInfo = await extractPageInfo(baseUrl);
@@ -93,13 +93,7 @@ async function scrapeWebsite(baseUrl, visited = new Set(), collectedData = []) {
     return collectedData;
 }
 
-// Start scraping from the main page
-async function startScraping(baseUrl) {
-    const data = await scrapeWebsite(baseUrl);
-    console.log("Collected Data:", data);
-}
-
-
 // Example usage
-const startUrl = 'https://cscd01.com/';
-startScraping(startUrl);
+const baseUrl = 'https://cscd01.com/';
+const data = await scrapeWebsite(baseUrl);
+console.log("Collected Data:", data);
