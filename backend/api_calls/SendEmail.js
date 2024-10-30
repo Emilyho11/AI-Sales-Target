@@ -12,17 +12,14 @@ app.use(cors());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-export function sendEmail(subject, text, to, from, name) {
-  const templatePath = '../../frontend/src/assets/email_template.html';
-  const template = fs.readFileSync(templatePath, 'utf8'); // Read HTML file
-  const htmlContent = template.replace('{{name}}', name); // Replace placeholder
+export function sendEmail(subject, text, to, from) {
 
   const msg = {
     to: to, // recipient
     from: from, // verified sender
     subject: subject,
     text: text,
-    html: htmlContent,
+    html: text,
   }
   
   sgMail

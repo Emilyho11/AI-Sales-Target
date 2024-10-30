@@ -8,43 +8,54 @@ import { useLocation } from 'react-router-dom';
 const EmailEditor = () => {
   const [editorContent, setEditorContent] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
-  const [emailSubject, setEmailSubject] = useState('');
+  const [emailSubject, setEmailSubject] = useState('Transform Your Practice with Clio');
   const location = useLocation();
-  const { sender, recipientName } = location.state || { sender: "", recipientEmail: "emily.ho@clio.com", recipientName: "there" };
+  const { sender, recipientName } = location.state || { sender: "", recipientName: "there" };
+  const [newEmail, setNewEmail] = useState(false);
 
   useEffect(() => {
     setRecipientEmail(location.state?.recipientEmail || "emily.ho@clio.com"); // Initialize recipientEmail
-    // Load the HTML template
-    const loadTemplate = async () => {
-      try {
-        // Pass the name as a query parameter
-        const response = await axios.get(`http://localhost:3000/api/email-template?name=${recipientName}`);
-        setEditorContent(response.data);
-      } catch (error) {
-        console.error('Error loading email template:', error.message);
-      }
-    };
-    loadTemplate();
-  }, [recipientName, location.state]);
+    // Load the HTML template if it's not a new email
+    if (!newEmail) {
+      const loadTemplate = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/email-template?name=${recipientName}`);
+          setEditorContent(response.data);
+        } catch (error) {
+          console.error('Error loading email template:', error.message);
+        }
+      };
+      loadTemplate();
+    }
+  }, [recipientName, location.state, newEmail]);
 
-  const handleEditorChange = (event) => {
-    setEditorContent(content);
-    setEditorContent(event.target.innerHTML);
+  // Track changes in ReactQuill for new email content
+  const handleEditorChange = (value) => {
+    setEditorContent(value);
   };
 
   const handleEmailChange = (event) => {
     setRecipientEmail(event.target.value);
   };
 
+  const handleCreateNew = () => {
+    setEditorContent('');
+    setEmailSubject('');
+    setNewEmail(true);
+  };
+
   const handleSave = async () => {
     const emailData = {
-      subject: emailSubject || "Transform Your Practice with Clio",
+      subject: emailSubject,
       text: editorContent,
       to: recipientEmail,
       from: "emily.ho@clio.com",
       name: recipientName,
     };
-  
+
+    // Print all values
+    console.log('Email data:', emailData);
+
     try {
       const response = await axios.post(`http://localhost:3000/api/send-email`, emailData);
       console.log('Email sent:', response.data);
@@ -58,7 +69,7 @@ const EmailEditor = () => {
   return (
     <ContentContainer className="flex justify-center items-center">
       <div className='w-2/3'>
-        <div className='flex gap-4'>
+        <div className='flex'>
           <input
             type="email"
             placeholder="To:"
@@ -66,11 +77,17 @@ const EmailEditor = () => {
             onChange={handleEmailChange}
             className='p-2 my-2 border border-gray-300 bg-white rounded-lg focus:ring-blue-500'
           />
+          <button
+            className='p-2 my-2 bg-red-500 hover:bg-red-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]'
+            onClick={handleCreateNew}
+          >
+            Create New
+          </button>
           <button 
-            className='p-2 my-2 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center' 
+            className='p-2 my-2 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]' 
             onClick={handleSave}
           >
-            Save and Send
+            Send
           </button>
         </div>
         <input
@@ -80,19 +97,21 @@ const EmailEditor = () => {
           onChange={(e) => setEmailSubject(e.target.value)}
           className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full focus:ring-blue-500'
         />
-        {/* <ReactQuill
-          theme="snow"
-          value={editorContent}
-          onChange={handleEditorChange}
-          className='h-96'
-        /> */}
-        <div
-          contentEditable
-          suppressContentEditableWarning
-          onInput={handleEditorChange} // Track changes in content
-          dangerouslySetInnerHTML={{ __html: editorContent }}
-          className='html-render-container border p-4 bg-white rounded-lg' 
-        />
+        {newEmail ? (
+          <ReactQuill
+            theme="snow"
+            value={editorContent}
+            onChange={handleEditorChange}
+            className='email-container border p-4 bg-white rounded-lg'
+          />
+        ) : (
+          <div
+            contentEditable
+            suppressContentEditableWarning
+            className='html-render-container border p-4 bg-white rounded-lg'
+            dangerouslySetInnerHTML={{ __html: editorContent }}
+          />
+        )}
       </div>
     </ContentContainer>
   );

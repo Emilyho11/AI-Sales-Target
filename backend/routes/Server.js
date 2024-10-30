@@ -123,7 +123,7 @@ app.get('/api/email-template', (req, res) => {
       return res.status(500).json({ error: 'Failed to load email template' });
     }
 
-    const htmlContent = template.replace('{{name}}', name || ''); // Replace placeholder with name
+    const htmlContent = template.replace('{{name}}', name || 'there'); // Replace placeholder with name
 
     res.setHeader('Content-Type', 'text/html');
     res.send(htmlContent);
