@@ -176,7 +176,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   if (isPitchPopupVisible) {
     return (
       <div className='flex z-50 bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
-        <PitchPopup lawFirm={lawFirm} pitch={pitch} onClose={handleClosePitchPopup} />
+        <PitchPopup lawFirm={lawFirm} pitch={pitch} onClose={handleClosePitchPopup} email={email} />
       </div>
     );
   }

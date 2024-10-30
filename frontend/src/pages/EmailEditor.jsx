@@ -10,13 +10,61 @@ const EmailEditor = () => {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [emailSubject, setEmailSubject] = useState('Transform Your Practice with Clio');
   const location = useLocation();
-  const { sender, recipientName } = location.state || { sender: "", recipientName: "there" };
+  const { sender, recipientName, pitch } = location.state || { sender: "", recipientName: "there", pitch: "" };
   const [newEmail, setNewEmail] = useState(false);
+
+  // Extract the subject from the pitch and set it as the email subject
+  const extractSubjectFromPitch = (pitch) => {
+    // Log the pitch content to debug
+    console.log('Pitch content:', pitch);
+
+    // Parse the HTML content
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(pitch, 'text/html');
+
+    // Find the subject line
+    const subjectElement = doc.querySelector('p:contains("Subject:")');
+    console.log('Subject element:', subjectElement);
+
+    if (subjectElement) {
+      const subjectText = subjectElement.textContent.replace('Subject:', '').trim();
+      setEmailSubject(subjectText);
+      subjectElement.remove(); // Remove the subject line from the HTML
+    }
+
+    // Serialize the updated HTML content back to a string
+    const updatedPitch = new XMLSerializer().serializeToString(doc);
+    return updatedPitch;
+  };
+
+  const formatPitchToHtml = (pitch) => {
+    // Replace '**Heading**' with bolded HTML
+    pitch = pitch.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    
+    // Add <p> tags around paragraphs
+    pitch = pitch.replace(/\n\n/g, "</p><p>"); // Separate double new lines as paragraph
+    pitch = `<p>${pitch.replace(/\n/g, "<br>")}</p>`; // Add line breaks within paragraphs
+    
+    // Format numbered lists
+    pitch = pitch.replace(/<li>.*<\/li>/g, "<ol>$&</ol>"); // Wrap the entire list in <ol>
+
+    // If there is a "Subject" line, add it to the email subject
+    const subjectRegex = /Subject: (.[^<]*)/; // Match the subject line
+    const subjectMatch = pitch.match(subjectRegex);
+
+    if (subjectMatch) {
+      setEmailSubject(subjectMatch[1]);
+      pitch = pitch.replace(subjectRegex, ''); // Remove the subject line from the pitch
+    }
+    
+    return pitch;
+  };
 
   useEffect(() => {
     setRecipientEmail(location.state?.recipientEmail || "emily.ho@clio.com"); // Initialize recipientEmail
+
     // Load the HTML template if it's not a new email
-    if (!newEmail) {
+    if (!newEmail && !pitch) {
       const loadTemplate = async () => {
         try {
           const response = await axios.get(`http://localhost:3000/api/email-template?name=${recipientName}`);
@@ -27,7 +75,12 @@ const EmailEditor = () => {
       };
       loadTemplate();
     }
-  }, [recipientName, location.state, newEmail]);
+    else if (pitch) {
+      const formattedPitch = formatPitchToHtml(pitch);
+      setEditorContent(formattedPitch);
+      setNewEmail(true);
+    }
+  }, [recipientName, location.state, newEmail, pitch]);
 
   // Track changes in ReactQuill for new email content
   const handleEditorChange = (value) => {
@@ -65,6 +118,8 @@ const EmailEditor = () => {
       alert('Failed to send email');
     }
   };
+
+  console.log('Email:', recipientEmail);
 
   return (
     <ContentContainer className="flex justify-center items-center">
