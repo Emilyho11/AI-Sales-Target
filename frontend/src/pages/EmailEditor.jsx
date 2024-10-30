@@ -7,29 +7,29 @@ import { useLocation } from 'react-router-dom';
 
 const EmailEditor = () => {
   const [editorContent, setEditorContent] = useState('');
-  // const [recipientEmail, setRecipientEmail] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
   const [emailSubject, setEmailSubject] = useState('');
   const location = useLocation();
-  const { sender, recipientEmail, recipientName } = location.state || { sender: "", recipientEmail: "", recipientName: "there" };
-  
+  const { sender, recipientName } = location.state || { sender: "", recipientEmail: "emily.ho@clio.com", recipientName: "there" };
+
   useEffect(() => {
+    setRecipientEmail(location.state?.recipientEmail || "emily.ho@clio.com"); // Initialize recipientEmail
     // Load the HTML template
     const loadTemplate = async () => {
       try {
         // Pass the name as a query parameter
         const response = await axios.get(`http://localhost:3000/api/email-template?name=${recipientName}`);
-        console.log(recipientName);
         setEditorContent(response.data);
       } catch (error) {
         console.error('Error loading email template:', error.message);
       }
     };
     loadTemplate();
-  }, [recipientName]);
+  }, [recipientName, location.state]);
 
-
-  const handleEditorChange = (content) => {
+  const handleEditorChange = (event) => {
     setEditorContent(content);
+    setEditorContent(event.target.innerHTML);
   };
 
   const handleEmailChange = (event) => {
@@ -80,11 +80,18 @@ const EmailEditor = () => {
           onChange={(e) => setEmailSubject(e.target.value)}
           className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full focus:ring-blue-500'
         />
-        <ReactQuill
+        {/* <ReactQuill
           theme="snow"
           value={editorContent}
           onChange={handleEditorChange}
           className='h-96'
+        /> */}
+        <div
+          contentEditable
+          suppressContentEditableWarning
+          onInput={handleEditorChange} // Track changes in content
+          dangerouslySetInnerHTML={{ __html: editorContent }}
+          className='html-render-container border p-4 bg-white rounded-lg' 
         />
       </div>
     </ContentContainer>
