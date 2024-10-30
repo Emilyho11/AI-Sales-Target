@@ -3,13 +3,15 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ContentContainer from '../components/ContentContainer';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
-const EmailEditor = ({ sender, recipientEmail, recipientName }) => {
+const EmailEditor = () => {
   const [editorContent, setEditorContent] = useState('');
   // const [recipientEmail, setRecipientEmail] = useState('');
   const [emailSubject, setEmailSubject] = useState('');
-  recipientName = recipientName || 'there';
-
+  const location = useLocation();
+  const { sender, recipientEmail, recipientName } = location.state || { sender: "", recipientEmail: "", recipientName: "there" };
+  
   useEffect(() => {
     // Load the HTML template
     const loadTemplate = async () => {
@@ -40,7 +42,7 @@ const EmailEditor = ({ sender, recipientEmail, recipientName }) => {
       text: editorContent,
       to: recipientEmail,
       from: "emily.ho@clio.com",
-      name: "Emily Ho",
+      name: recipientName,
     };
   
     try {
@@ -59,10 +61,10 @@ const EmailEditor = ({ sender, recipientEmail, recipientName }) => {
         <div className='flex gap-4'>
           <input
             type="email"
-            placeholder="Recipient's email"
+            placeholder="To:"
             value={recipientEmail}
             onChange={handleEmailChange}
-            className='p-2 my-2 border border-gray-300 bg-white rounded-lg'
+            className='p-2 my-2 border border-gray-300 bg-white rounded-lg focus:ring-blue-500'
           />
           <button 
             className='p-2 my-2 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center' 
@@ -73,10 +75,10 @@ const EmailEditor = ({ sender, recipientEmail, recipientName }) => {
         </div>
         <input
           type="text"
-          placeholder="Email subject"
+          placeholder="Subject:"
           value={emailSubject}
           onChange={(e) => setEmailSubject(e.target.value)}
-          className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full'
+          className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full focus:ring-blue-500'
         />
         <ReactQuill
           theme="snow"

@@ -26,6 +26,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   const [isFullSummaryVisible, setIsFullSummaryVisible] = useState(false);
   const [percentage, setPercentage] = useState('');
   const [summary, setSummary] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getWebsite = async () => {
@@ -154,6 +155,10 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
     const sentences = text.split('. ');
     return sentences.slice(0, 4).join('. ') + (sentences.length > 4 ? '...' : '');
   };
+
+  const emailNavigate = () => {
+    navigate('/emailEditor', { state: { sender: "", recipientEmail: email, recipientName: lawFirm.name } });
+  }
 
   const handleSummarize = async () => {
     setLoadingSummary(true);
@@ -305,7 +310,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         </div>
       </div>
       <div className='px-6 grid grid-cols-3 gap-4 pb-10'>
-        <button className='flex gap-4 bg-[#E35447] hover:bg-[#e87e74] text-white rounded-lg py-2 justify-center items-center' onClick={() => window.open(directionsLink, '_blank')}>
+        <button className='flex gap-4 bg-[#E35447] hover:bg-[#e87e74] text-white rounded-lg py-2 justify-center items-center' onClick={emailNavigate}>
           Send Email
           <FontAwesomeIcon icon={faEnvelope} className='mr-2' />
         </button>
