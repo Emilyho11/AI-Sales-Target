@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import dotenv from 'dotenv';
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-// Load environment variables from .env file
 dotenv.config({ path: '../.env' });
+
 const uri = process.env.MONGODB_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -14,36 +14,14 @@ const client = new MongoClient(uri, {
   }
 });
 
-async function run() {
+export async function connect() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    console.log("Connected successfully to MongoDB");
-
-    // Specify the database and collection
-    const database = client.db('legalSalesTarget');
-    const collection = database.collection('users');
-
-    // Insert a single document
-    const user = {
-      name: 'John Doe',
-      email: 'JohnDoe@mail.com',
-      password: 'abc',
-    };
-
-    const result = await collection.insertOne(user);
-
-    // Retrieve the document
-    const query = { name: 'John Doe' };
-    const userDocument = await collection.findOne(query);
-    console.log(userDocument);
-
+    if (!client.topology || !client.topology.isConnected()) {
+      await client.connect();
+    }
+    return client.db('legalSalesTarget').collection('users');
   } catch (error) {
-    console.error(error);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    console.error('Error connecting to the database:', error);
+    throw error; // Rethrow the error to handle it in the calling function
   }
 }
-
-run().catch(console.dir);
