@@ -119,7 +119,7 @@ const Map = ({ onLawFirmsFound, searchBarValue, isSearchPressed, userLocation, o
   }
 
   return (
-    <div className="w-2/3 h-[650px]">
+    <div className="w-2/3 h-[650px] xl:h-[800px]">
       <GoogleMap
         mapContainerClassName="w-full h-full"
         center={center}

@@ -134,7 +134,7 @@ const Home = () => {
             ) : (
               <>
                 <h3 className='text-xl font-bold p-4 bg-clio_color'>Nearby Law Firms <span className='font-medium text-sm'> ({lawFirms.length} Found)</span></h3>
-                <ul className='scroll-y-auto h-[590px] overflow-y-auto'>
+                <ul className='scroll-y-auto h-[590px] xl:h-[750px] overflow-y-auto'>
                   {lawFirms.map((firm, index) => (
                     <li 
                       key={index}

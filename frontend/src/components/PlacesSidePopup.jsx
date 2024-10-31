@@ -175,7 +175,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
 
   if (isPitchPopupVisible) {
     return (
-      <div className='flex z-50 bg-gray-300 h-[650px] scroll-y-auto overflow-auto'>
+      <div className='flex z-50 bg-gray-300 h-[650px] xl:h-[800px] scroll-y-auto overflow-auto'>
         <PitchPopup lawFirm={lawFirm} pitch={pitch} onClose={handleClosePitchPopup} email={email} />
       </div>
     );
@@ -185,7 +185,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   const condensedComparison = parseDoubleNewLines(comparison);
 
   return (
-    <div className='bg-gray-300 h-[650px] scroll-y-auto overflow-auto relative'>
+    <div className='bg-gray-300 h-[650px] xl:h-[800px] scroll-y-auto overflow-auto relative'>
       <div className='bg-clio_color p-4'>
         <button onClick={handleClosePopup} className='text-black hover:text-black/50 py-2 rounded-lg'>
           <FontAwesomeIcon icon={faArrowLeft} />

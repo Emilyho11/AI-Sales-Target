@@ -45,7 +45,7 @@ export async function updateUser(userEmail, updatedUser) {
 export async function getUsers() {
   const collection = await connect();
   const users = await collection.find({}).toArray();
-  console.log('Users retrieved:', users);
+  console.log('Users retrieved.');
   return users;
 }
 
