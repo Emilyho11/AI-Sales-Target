@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ContentContainer from '../components/ContentContainer';
-import axios from 'axios';
+import api from "../../axiosConfig";
 import { useLocation } from 'react-router-dom';
 
 const EmailEditor = () => {
@@ -12,30 +12,6 @@ const EmailEditor = () => {
   const location = useLocation();
   const { sender, recipientName, pitch } = location.state || { sender: "", recipientName: "there", pitch: "" };
   const [newEmail, setNewEmail] = useState(false);
-
-  // Extract the subject from the pitch and set it as the email subject
-  const extractSubjectFromPitch = (pitch) => {
-    // Log the pitch content to debug
-    console.log('Pitch content:', pitch);
-
-    // Parse the HTML content
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(pitch, 'text/html');
-
-    // Find the subject line
-    const subjectElement = doc.querySelector('p:contains("Subject:")');
-    console.log('Subject element:', subjectElement);
-
-    if (subjectElement) {
-      const subjectText = subjectElement.textContent.replace('Subject:', '').trim();
-      setEmailSubject(subjectText);
-      subjectElement.remove(); // Remove the subject line from the HTML
-    }
-
-    // Serialize the updated HTML content back to a string
-    const updatedPitch = new XMLSerializer().serializeToString(doc);
-    return updatedPitch;
-  };
 
   const formatPitchToHtml = (pitch) => {
     // Replace '**Heading**' with bolded HTML
@@ -67,7 +43,7 @@ const EmailEditor = () => {
     if (!newEmail && !pitch) {
       const loadTemplate = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/email-template?name=${recipientName}`);
+          const response = await api.get(`/email-template?name=${recipientName}`);
           setEditorContent(response.data);
         } catch (error) {
           console.error('Error loading email template:', error.message);
@@ -110,7 +86,7 @@ const EmailEditor = () => {
     console.log('Email data:', emailData);
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/send-email`, emailData);
+      const response = await api.post(`/send-email`, emailData);
       console.log('Email sent:', response.data);
       alert('Email sent successfully');
     } catch (error) {

@@ -3,8 +3,8 @@ import GetImage from './GetImage';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faEnvelope, faExternalLink, faStar, faStarHalfAlt, faInfoCircle, faPlus, faClock, faHouse, faPhone, faDollarSign, faGlobe, faChevronUp, faChevronDown, faCheck, faGauge, faMeteor, faChartLine, faHandshake, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faSquareCheck, faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
-import axios from 'axios';
-import GetDirections from '../../../backend/api_calls/GoogleMapsLink';
+import api from "../../axiosConfig";
+import GetDirections from '../../../backend/api_gateway/routes/GoogleMapsLink.js';
 import { useNavigate } from 'react-router-dom';
 import { summarizeContent } from '../utils/AIsummarizer.js';
 import PitchPopup from './PitchPopup';
@@ -31,7 +31,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   useEffect(() => {
     const getWebsite = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/get-website?place_id=${lawFirm.place_id}`);
+        const response = await api.get(`/get-website?place_id=${lawFirm.place_id}`);
         console.log('Website:', response.data);
         if (response.status !== 200) {
           console.error('Error fetching website:', response.data);
@@ -48,7 +48,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   useEffect(() => {
     const getContactInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/scrape-contact-info?url=${website}`);
+        const response = await api.get(`/scrape-contact-info?url=${website}`);
         if (response.status !== 200) {
           console.error('Error fetching contact info:', response.data);
           return;
