@@ -49,3 +49,53 @@ Using a microservice architecture, the web application features an intuitive, ma
 - Molly Ariunbold
 
 ## Images
+<div style="display: flex; justify-content: space-around; gap: 10px;">
+  <div style="text-align: center; width: 48%;">
+    <h3>Login</h3>
+    <img src="frontend/src/assets/login.png" alt="Login" style="width: 100%;"/>
+  </div>
+  <div style="text-align: center; width: 48%;">
+    <h3>Signup</h3>
+    <img src="frontend/src/assets/signup.png" alt="Signup" style="width: 100%;"/>
+  </div>
+</div>
+<div style="text-align: center; width: 70%;">
+<h3>Searching for law firms in Vancouver</h3>
+<img src="frontend/src/assets/nearby-firms-vancouver.png" alt="Nearby firms Vancouver" style="width: 100%;"/>
+</div>
+<div style="text-align: center; width: 70%;">
+<h3>Selecting a law firm</h3>
+<img src="frontend/src/assets/selected-firm-vancouver.png" alt="Selected Firm Vancouver" style="width: 100%;"/>
+</div>
+<div style="text-align: center; width: 70%;">
+<h3>AI-generated summary and benefits of Clio's services for the firm</h3>
+<img src="frontend/src/assets/overviewAIText.png" alt="Summary" style="width: 100%;"/>
+</div>
+<div style="display: flex; justify-content: space-around; gap: 10px;">
+  <div style="text-align: center; width: 45%;">
+    <h3>AI-generated pitch</h3>
+    <img src="frontend/src/assets/pitch.png" alt="Pitch" style="width: 100%;"/>
+  </div>
+  <div style="text-align: center; width: 60%;">
+    <h3>Email to send to that law firm using the pitch</h3>
+    <img src="frontend/src/assets/email-not-sent.png" alt="Clio pitch email" style="width: 100%;"/>
+  </div>
+</div>
+<div style="text-align: center; width: 70%;">
+    <h3>AI-generated pitch sent to the email (to test, I used my email)</h3>
+    <img src="frontend/src/assets/email-sent.png" alt="Pitch email sent" style="width: 100%;"/>
+</div>
+<div style="display: flex; justify-content: space-around; gap: 10px;">
+  <div style="text-align: center; width: 60%;">
+    <h3>Email template</h3>
+    <img src="frontend/src/assets/email-template.png" alt="Email Template" style="width: 100%;"/>
+  </div>
+  <div style="text-align: center; width: 40%;">
+    <h3>Email template Sent</h3>
+    <img src="frontend/src/assets/email-template-sent.png" alt="Email Template Sent" style="width: 100%;"/>
+    </div>
+</div>
+<div style="text-align: center; width: 70%;">
+    <h3>You can zoom in on the map to explore and view the location in detail</h3>
+    <img src="frontend/src/assets/cn-tower.png" alt="CN Tower Map View" style="width: 100%;"/>
+</div>
