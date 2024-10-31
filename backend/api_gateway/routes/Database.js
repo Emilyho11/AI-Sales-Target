@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import bodyParser from 'body-parser';
-import { insertUser, deleteUser, updateUser, getUsers, getUserByEmail, loginUser } from '../../database/Users.js';
+import { insertUser, deleteUser, updateUser, getUsers, getUserByEmail, loginUser, userExists } from '../../database/Users.js';
 
 const app = express();
 const port = 3001;
@@ -13,15 +13,21 @@ app.use(bodyParser.json());
 
 // Route to insert the user in the database
 app.post('/api/addUser', async (req, res) => {
-  const newUser = req.query.user; // Getting user from query params
-
+  const newUser = req.body.user; // Getting user from query params
+  
   if (!newUser) {
     return res.status(400).json({ error: 'user is required' });
   }
 
+  // Check if user exists
+  const exists = await userExists(newUser.email);
+  if (exists) {
+    return res.json({ message: 'User already exists' });
+  }
+
   try {
     // Insert the user in the database
-    insertUser(newUser);
+    await insertUser(newUser);
     return res.json({ message: 'User inserted successfully' });
   } catch (error) {
     console.error('Error inserting user:', error);
@@ -35,10 +41,16 @@ app.post('/api/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
-
+  
   try {
     // Login the user
     const user = await loginUser(email, password);
+    if (user === "User not found") {
+      return res.json({ message: 'User not found' });
+    }
+    if (user === "Incorrect password") {
+      return res.json({ message: 'Incorrect password' });
+    }
     return res.json({ message: 'User logged in successfully', user });
   } catch (error) {
     console.error('Error logging in user:', error);

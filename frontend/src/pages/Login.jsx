@@ -19,12 +19,16 @@ const Login = () => {
                 email: email,
                 password: password,
             });
-            if (response.data.message === "Logged in") {
+            if (response.data.message === "User logged in successfully") {
                 setMessage("Login successful");
-                login(username);
+                login(email);
                 navigate("/");
+            } else if (response.data.message === "User not found") {
+                setMessage("User not found");
+            } else if (response.data.message === "Incorrect password") {
+                setMessage("Incorrect password");
             } else {
-                setMessage("Login failed");
+                setMessage("Failed to login");
             }
         } catch (error) {
             console.error("Error during login:", error);
@@ -42,7 +46,7 @@ const Login = () => {
                 >
                     <label htmlFor="email">Email:</label>
                     <input
-                        type="text"
+                        type="email"
                         id="email"
                         name="email"
                         value={email}

@@ -22,7 +22,6 @@ const Navbar = () => {
   const myLinks = [
     { name: 'Home', url: '/', icon: faHouse },
     { name: 'Email Builder', url: '/emailEditor', icon: faPen },
-    { name: 'Login', url: '/login', icon: faSignOutAlt },
     { name: 'Logout', url: '/logout', icon: faSignOutAlt },
   ]
 
@@ -31,23 +30,25 @@ const Navbar = () => {
       <div className='flex items-center ml-24'>
         <img src={ClioLogo} alt='Clio Logo' className='w-[135px] h-[50px]' />
       </div>
-      <div className="m-4 mr-32 absolute top-5 right-0 gap-14 text-base hidden lg:flex">
-					{myLinks.map((link, index) => (
-						<NavLink
-							key={index}
-							to={link.url}
-							className={({ isActive }) =>
-								[
-									"text-clio_color hover:text-dark_green transition-all pb-2 ",
-									!isActive ? "active" : "!text-dark_green scale-110 border-b-2 border-dark_green",
-								].join(" ")
-							}
-						>
-							{link.name}
-							<FontAwesomeIcon icon={link.icon} className="ml-2" />
-						</NavLink>
-					))}
-				</div>
+      {isLoggedIn() && (
+        <div className="m-4 mr-32 absolute top-5 right-0 gap-14 text-base hidden lg:flex">
+            {myLinks.map((link, index) => (
+              <NavLink
+                key={index}
+                to={link.url}
+                className={({ isActive }) =>
+                  [
+                    "text-clio_color hover:text-dark_green transition-all pb-2 ",
+                    !isActive ? "active" : "!text-dark_green scale-110 border-b-2 border-dark_green",
+                  ].join(" ")
+                }
+              >
+                {link.name}
+                <FontAwesomeIcon icon={link.icon} className="ml-2" />
+              </NavLink>
+            ))}
+          </div>
+      )}
         <div className="lg:hidden flex items-center absolute top-0 right-0 m-4">
           <button
             onClick={() => setIsOpen(!isOpen)}

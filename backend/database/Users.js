@@ -7,7 +7,18 @@ export async function insertUser(user) {
   const hashedPassword = await bcrypt.hash(user.password, 10); // Hash the password
   user.password = hashedPassword;
   const result = await collection.insertOne(user);
-  console.log(`New user inserted with the following id: ${result.insertedId}`);
+  console.log(`New user inserted `);
+}
+
+// Check if user exists in database
+export async function userExists(userEmail) {
+  const collection = await connect();
+  // Check if the user already exists
+  const existingUser = await collection.findOne({ email: userEmail });
+  if (existingUser) {
+    console.log('User already exists');
+    return true;
+  }
 }
 
 // Delete a user by email
@@ -51,13 +62,13 @@ export async function loginUser(email, password) {
   const collection = await connect();
   const user = await collection.findOne({ email: email });
   if (!user) {
-    throw new Error('User not found');
+    return "User not found";
   }
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw new Error('Invalid password');
+    return "Incorrect password";
   }
-  console.log('User logged in:', user);
+  console.log('User logged in');
   return user;
 }
 
