@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faSignOutAlt, faBars, faPen } from "@fortawesome/free-solid-svg-icons";
 import ClioLogo from '../assets/clio-logo.png'
+import { useAuth } from './AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(() => {
+		if (location.pathname !== "/login" && !isLoggedIn()) {
+			navigate("/login");
+		}
+	}, []);
+
   const myLinks = [
     { name: 'Home', url: '/', icon: faHouse },
     { name: 'Email Builder', url: '/emailEditor', icon: faPen },
+    { name: 'Login', url: '/login', icon: faSignOutAlt },
     { name: 'Logout', url: '/logout', icon: faSignOutAlt },
   ]
 

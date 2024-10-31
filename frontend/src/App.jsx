@@ -4,20 +4,25 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import EmailEditor from './pages/EmailEditor';
 import Footer from './components/Footer';
+import Login from './pages/Login';
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-grow bg-white">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/emailEditor" element={<EmailEditor />} />
-          </Routes>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <div className="flex-grow bg-white">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/emailEditor" element={<EmailEditor />} />
+              <Route path='/login' element={<Login />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
