@@ -50,10 +50,10 @@ export async function getUsers() {
 }
 
 // Retrieve a user by email
-export async function getUserByEmail(email) {
+export async function getUserByEmail(userEmail) {
   const collection = await connect();
-  const user = await collection.findOne({ email: email });
-  console.log('User retrieved:', user);
+  const user = await collection.findOne({ email: userEmail });
+  console.log('User retrieved.');
   return user;
 }
 

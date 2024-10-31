@@ -95,6 +95,29 @@ app.put('/api/updateUser', async (req, res) => {
   }
 });
 
+// Get user from email
+app.get('/api/getUserByEmail', async (req, res) => {
+  const email = req.query.email;
+
+  if (!email) {
+    return res.status(400).json({ error: 'email is required' });
+  }
+
+  try {
+    const user = await getUserByEmail(email);
+    console.log("Retrieved user:", user); // Debugging log
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.json({ message: 'User retrieved successfully', user });
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    return res.status(500).json({ error: 'An error occurred while retrieving user' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });

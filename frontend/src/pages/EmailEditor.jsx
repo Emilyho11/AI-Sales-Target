@@ -4,14 +4,16 @@ import 'react-quill/dist/quill.snow.css';
 import ContentContainer from '../components/ContentContainer';
 import { apiInstance } from "../../axiosConfig";
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 
 const EmailEditor = () => {
   const [editorContent, setEditorContent] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
   const [emailSubject, setEmailSubject] = useState('Transform Your Practice with Clio');
   const location = useLocation();
-  const { sender, recipientName, pitch } = location.state || { sender: "", recipientName: "there", pitch: "" };
+  const { recipientName, pitch } = location.state || { recipientName: "there", pitch: "" };
   const [newEmail, setNewEmail] = useState(false);
+  const { getEmail } = useAuth();
 
   const formatPitchToHtml = (pitch) => {
     // Replace '**Heading**' with bolded HTML
@@ -37,7 +39,7 @@ const EmailEditor = () => {
   };
 
   useEffect(() => {
-    setRecipientEmail(location.state?.recipientEmail || "emily.ho@clio.com"); // Initialize recipientEmail
+    setRecipientEmail(location.state?.recipientEmail || ""); // Initialize recipientEmail
 
     // Load the HTML template if it's not a new email
     if (!newEmail && !pitch) {
@@ -85,7 +87,7 @@ const EmailEditor = () => {
       subject: emailSubject,
       text: editorContent,
       to: recipientEmail,
-      from: "emily.ho@clio.com",
+      from: getEmail(),
       name: recipientName,
     };
 

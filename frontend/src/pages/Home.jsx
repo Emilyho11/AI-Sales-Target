@@ -3,6 +3,7 @@ import ContentContainer from '../components/ContentContainer';
 import Map from '../components/Map';
 import { StandaloneSearchBox, useLoadScript } from "@react-google-maps/api";
 import PlacesSidePopup from '../components/PlacesSidePopup';
+import { useAuth } from '../components/AuthContext';
 
 const libraries = ["places"];
 
@@ -19,6 +20,7 @@ const Home = () => {
   const searchBox = useRef(null);
   const [isClickedToOpen, setIsClickedToOpen] = useState(false);
   const [selectedLawFirm, setSelectedLawFirm] = useState(null);
+  const { getName } = useAuth();
 
   const handleLawFirmsFound = (firms) => {
     setLawFirms(firms);
@@ -88,7 +90,7 @@ const Home = () => {
   
   return (
     <ContentContainer>
-      <h2>Welcome, Emily Ho</h2>
+      <h2>Welcome, {getName()}</h2>
         <div className="flex items-center z-10 w-full space-x-2 py-4">
           <StandaloneSearchBox
             onLoad={(ref) => (searchBox.current = ref)}

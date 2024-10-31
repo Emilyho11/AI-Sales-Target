@@ -157,7 +157,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
   };
 
   const emailNavigate = () => {
-    navigate('/emailEditor', { state: { sender: "", recipientEmail: email, recipientName: lawFirm.name } });
+    navigate('/emailEditor', { state: { recipientEmail: email, recipientName: lawFirm.name } });
   }
 
   const handleSummarize = async () => {

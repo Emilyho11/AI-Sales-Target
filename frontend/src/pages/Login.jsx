@@ -11,6 +11,22 @@ const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
+    const getName = async (email) => {
+		try {
+			const response = await databaseInstance.get("/getUserByEmail", {
+				params: {email},
+			});
+            if (response.data.message === 'User retrieved successfully') {
+                return response.data.user.name;
+            } else {
+                return "";
+            }
+        } catch (error) {
+            console.error("Error getting user:", error);
+            return "";
+        }
+	};
+
     const handleSubmit = async (event) => {
         setMessage("Logging in...");
         event.preventDefault();
@@ -21,7 +37,8 @@ const Login = () => {
             });
             if (response.data.message === "User logged in successfully") {
                 setMessage("Login successful");
-                login(email);
+                const name = await getName(email);
+                login(email, name);
                 navigate("/");
             } else if (response.data.message === "User not found") {
                 setMessage("User not found");

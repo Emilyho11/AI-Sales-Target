@@ -8,7 +8,7 @@ const PitchPopup = ({ lawFirm, pitch, onClose, email }) => {
   const navigate = useNavigate();
 
   const emailNavigate = () => {
-    navigate('/emailEditor', { state: { sender: "", recipientEmail: email, recipientName: lawFirm.name, pitch: pitch } });
+    navigate('/emailEditor', { state: { recipientEmail: email, recipientName: lawFirm.name, pitch: pitch } });
   }
 
   return (
