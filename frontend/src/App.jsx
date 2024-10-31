@@ -4,7 +4,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import EmailEditor from './pages/EmailEditor';
 import Footer from './components/Footer';
-import Summary from './pages/Summary';
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/emailEditor" element={<EmailEditor />} />
-            <Route path="/summarizer" element={<Summary />} />
           </Routes>
         </div>
         <Footer />

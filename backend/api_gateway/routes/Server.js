@@ -5,9 +5,18 @@ import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import bodyParser from 'body-parser';
 import { sendEmail } from './SendEmail.js';
+import fs from 'fs';
+import path from 'path'; // Import the path module
+import { fileURLToPath } from 'url'; // Import the fileURLToPath function from the url module
 
+// Define __dirname for ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Resolve the path to the .env file
+const envPath = path.resolve(__dirname, '../../.env');
 // Load environment variables from .env file
-dotenv.config({ path: '../../.env' });
+dotenv.config({ path: envPath });
 
 const app = express();
 const port = 3000;

@@ -1,4 +1,3 @@
-import { MongoClient } from 'mongodb';
 import { connect } from './Connect.js';
 import bcrypt from 'bcrypt';
 
@@ -63,24 +62,24 @@ export async function loginUser(email, password) {
 }
 
 // Example usage
-async function main() {
-  try {
-    // Insert a new user
-    await insertUser({ name: 'John Doe', email: 'john.doe@example.com', password: 'password123' });
+// async function main() {
+//   try {
+//     // Insert a new user
+//     await insertUser({ name: 'John Doe', email: 'john.doe@example.com', password: 'password123' });
 
-    // Retrieve all users
-    const users = await getUsers();
-    console.log('All users:', users);
+//     // Retrieve all users
+//     const users = await getUsers();
+//     console.log('All users:', users);
 
-    // Login a user
-    await loginUser('john.doe@example.com', 'password123');
+//     // Login a user
+//     await loginUser('john.doe@example.com', 'password123');
 
-    // Exit the process after completing the operations
-    process.exit(0);
-  } catch (error) {
-    console.error('Error:', error);
-    process.exit(1); // Exit with an error code
-  }
-}
+//     // Exit the process after completing the operations
+//     process.exit(0);
+//   } catch (error) {
+//     console.error('Error:', error);
+//     process.exit(1); // Exit with an error code
+//   }
+// }
 
-main();
+// main();
