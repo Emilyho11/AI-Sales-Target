@@ -9,14 +9,8 @@ The web application features an intuitive, map-based interface that allows users
 - Developing promotional content and tailored pitches/proposals for each law firm.
 - Sending templated or AI-generated emails to the selected law firm to promote Clio or notify them of any updates
 
-## To run the app
-### Open a terminal and run the backend:
-- `cd backend/routes`
-- `node Server.js`
-
-### Open another terminal and run the frontend:
-- `cd frontend`
-- `npm run dev`
+## Running the app
+- Run: `npm start` in the root directory
 
 ## Thank you to the following Clions for their valuable insights on Clio's sales teams:
 - Scott Adema
