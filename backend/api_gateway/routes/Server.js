@@ -4,12 +4,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import bodyParser from 'body-parser';
-import { sendEmail } from '../api_calls/SendEmail.js';
-import path from 'path';
-import fs from 'fs';
+import { sendEmail } from './SendEmail.js';
 
 // Load environment variables from .env file
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../../.env' });
 
 const app = express();
 const port = 3000;

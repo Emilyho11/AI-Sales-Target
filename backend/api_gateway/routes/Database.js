@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import bodyParser from 'body-parser';
-import { insertUser, deleteUser, updateUser, getUsers, getUserByEmail, loginUser } from '../database/Users.js';
+import { insertUser, deleteUser, updateUser, getUsers, getUserByEmail, loginUser } from '../../database/Users.js';
 
 const app = express();
 const port = 3001;
