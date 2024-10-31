@@ -26,12 +26,12 @@ const Navbar = () => {
   ]
 
   return (
-    <header className='header flex w-full h-[72px] bg-gray-200 relative shadow z-10'>
-      <div className='flex items-center ml-24'>
-        <img src={ClioLogo} alt='Clio Logo' className='w-[135px] h-[50px]' />
-      </div>
-      {isLoggedIn() && (
-        <div className="m-4 mr-32 absolute top-5 right-0 gap-14 text-base hidden lg:flex">
+    isLoggedIn() && (
+      <header className='header flex w-full h-[72px] bg-gray-200 relative shadow z-10'>
+          <div className='flex items-center ml-24'>
+            <img src={ClioLogo} alt='Clio Logo' className='w-[135px] h-[50px]' />
+          </div>
+          <div className="m-4 mr-32 absolute top-5 right-0 gap-14 text-base hidden lg:flex">
             {myLinks.map((link, index) => (
               <NavLink
                 key={index}
@@ -48,7 +48,6 @@ const Navbar = () => {
               </NavLink>
             ))}
           </div>
-      )}
         <div className="lg:hidden flex items-center absolute top-0 right-0 m-4">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -78,6 +77,7 @@ const Navbar = () => {
           </div>
         )}
     </header>
+    )
   )
 }
 

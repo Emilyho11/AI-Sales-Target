@@ -3,6 +3,7 @@ import { apiInstance, databaseInstance } from '../../axiosConfig';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import Card from "../components/Card";
+import ClioBg from "../assets/clio-bg.png";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -54,12 +55,13 @@ const Login = () => {
     };
 
     return (
-        <div className="relative w-full h-screen flex items-center justify-center">
-            <Card className="relative z-10 w-4/5 md:w-1/2 lg:w-1/3 xl:w-1/4 px-14 flex flex-col bg-gray-100 py-24 md:py-16">
-                <h1>Login</h1>
+        <div className="relative h-screen flex items-center xl:pl-80 p-10 md:p-20">
+            <img src={ClioBg} className="absolute inset-0 object-cover w-full h-full z-0" />
+            <Card className="w-4/5 md:w-1/2 lg:w-1/3 p-10 xl:py-20 xl:px-24 items-start bg-gray-100 xl:h-3/5">
+                <h1 className="pb-6">Login</h1>
                 <form
                     onSubmit={handleSubmit}
-                    className="flex flex-col w-full [&>input]:bg-gray-200 [&>input]:px-2 [&>input]:py-2 [&>input]:rounded-sm [&>label]:text-left"
+                    className="flex flex-col w-full [&>input]:bg-gray-200 [&>input]:px-4 [&>input]:py-4 [&>input]:rounded-md [&>label]:text-left"
                 >
                     <label htmlFor="email">Email:</label>
                     <input
@@ -84,7 +86,10 @@ const Login = () => {
 					<Link className="text-blue-600 text-left hover:text-dark_red hover:underline my-6" to="/signup">
 						Don't have an account yet? Sign up here.
 					</Link>
-                    <button type="submit" className="w-1/2 mx-auto flex items-center justify-center mt-6">
+                    <button
+                        type="submit"
+                        className="w-1/2 flex items-center justify-center mt-6 text-white bg-clio_color hover:bg-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-md px-5 py-2.5 mb-2"
+                        >
                         Login
                     </button>
                 </form>
