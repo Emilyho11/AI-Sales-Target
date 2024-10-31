@@ -6,6 +6,8 @@ import EmailEditor from './pages/EmailEditor';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import { AuthProvider } from './components/AuthContext';
+import Signup from './pages/Signup';
+import Logout from './pages/Logout';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/emailEditor" element={<EmailEditor />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+              <Route path="/logout" element={<Logout />} />
             </Routes>
           </div>
           <Footer />
