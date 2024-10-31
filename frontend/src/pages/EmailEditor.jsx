@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ContentContainer from '../components/ContentContainer';
-import api from "../../axiosConfig";
+import { apiInstance } from "../../axiosConfig";
 import { useLocation } from 'react-router-dom';
 
 const EmailEditor = () => {
@@ -43,7 +43,7 @@ const EmailEditor = () => {
     if (!newEmail && !pitch) {
       const loadTemplate = async () => {
         try {
-          const response = await api.get(`/email-template?name=${recipientName}`);
+          const response = await apiInstance.get(`/email-template?name=${recipientName}`);
           setEditorContent(response.data);
         } catch (error) {
           console.error('Error loading email template:', error.message);
@@ -67,13 +67,20 @@ const EmailEditor = () => {
     setRecipientEmail(event.target.value);
   };
 
+  const handleSubjectChange = (event) => {
+    event.preventDefault();
+    setEmailSubject(event.target.value);
+  };
+
   const handleCreateNew = () => {
     setEditorContent('');
     setEmailSubject('');
     setNewEmail(true);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (event) => {
+    event.preventDefault();
+
     const emailData = {
       subject: emailSubject,
       text: editorContent,
@@ -86,7 +93,7 @@ const EmailEditor = () => {
     console.log('Email data:', emailData);
 
     try {
-      const response = await api.post(`/send-email`, emailData);
+      const response = await apiInstance.post(`/send-email`, emailData);
       console.log('Email sent:', response.data);
       alert('Email sent successfully');
     } catch (error) {
@@ -100,34 +107,39 @@ const EmailEditor = () => {
   return (
     <ContentContainer className="flex justify-center items-center">
       <div className='w-2/3'>
-        <div className='flex'>
+      <form onSubmit={handleSave}>
+          <div className='flex'>
+            <input
+              type="email"
+              placeholder="To:"
+              value={recipientEmail}
+              required
+              onChange={handleEmailChange}
+              className='p-2 my-2 border border-gray-300 bg-white rounded-lg focus:ring-blue-500'
+            />
+            <button
+              type="button"
+              className='p-2 my-2 bg-red-500 hover:bg-red-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]'
+              onClick={handleCreateNew}
+            >
+              Create New
+            </button>
+            <button 
+              type="submit"
+              className='p-2 my-2 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]' 
+            >
+              Send
+            </button>
+          </div>
           <input
-            type="email"
-            placeholder="To:"
-            value={recipientEmail}
-            onChange={handleEmailChange}
-            className='p-2 my-2 border border-gray-300 bg-white rounded-lg focus:ring-blue-500'
+            type="text"
+            placeholder="Subject:"
+            value={emailSubject}
+            required
+            onChange={handleSubjectChange}
+            className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full focus:ring-blue-500'
           />
-          <button
-            className='p-2 my-2 bg-red-500 hover:bg-red-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]'
-            onClick={handleCreateNew}
-          >
-            Create New
-          </button>
-          <button 
-            className='p-2 my-2 bg-clio_color hover:bg-blue-400 py-2 px-4 m-2 rounded-lg flex items-center justify-center w-[120px]' 
-            onClick={handleSave}
-          >
-            Send
-          </button>
-        </div>
-        <input
-          type="text"
-          placeholder="Subject:"
-          value={emailSubject}
-          onChange={(e) => setEmailSubject(e.target.value)}
-          className='p-2 mb-2 border border-gray-300 bg-white rounded-lg w-full focus:ring-blue-500'
-        />
+        </form>
         {newEmail ? (
           <ReactQuill
             theme="snow"

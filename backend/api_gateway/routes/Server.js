@@ -122,7 +122,7 @@ app.post('/api/send-email', (req, res) => {
 // Route to serve the HTML template
 app.get('/api/email-template', (req, res) => {
   const name = req.query.name; // Get the name from query parameters
-  const templatePath = '../../frontend/src/assets/email_template.html';
+  const templatePath = path.resolve(__dirname, '../../../frontend/src/assets/email_template.html');
 
   fs.readFile(templatePath, 'utf8', (err, template) => {
     if (err) {

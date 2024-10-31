@@ -20,11 +20,11 @@ const PitchPopup = ({ lawFirm, pitch, onClose, email }) => {
             <h3 className='text-xl font-bold'>{lawFirm.name}</h3>
         </div>
         <div className='p-8 whitespace-pre-wrap'>
-            <Markdown>{pitch}</Markdown>
+            <Markdown className='pb-4'>{pitch}</Markdown>
             <button className='flex gap-4 bg-[#E35447] hover:bg-[#e87e74] text-white rounded-lg py-2 justify-center items-center p-4' onClick={emailNavigate}>
-            Send Email
-            <FontAwesomeIcon icon={faEnvelope} className='mr-2' />
-          </button>
+              Send Email
+              <FontAwesomeIcon icon={faEnvelope} className='mr-2' />
+            </button>
         </div>
     </div>
   )
