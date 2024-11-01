@@ -62,12 +62,12 @@ Using a microservice architecture, the web application features an intuitive, ma
   </div>
 </div>
 <div style="text-align: center; width: 70%;">
-<h3>Searching for law firms in Vancouver</h3>
-<img src="frontend/src/assets/nearby-firms-vancouver.png" alt="Nearby firms Vancouver" style="width: 100%;"/>
+<h3>Searching for law firms in Markham, ON. (for example)</h3>
+<img src="frontend/src/assets/nearby-firms-markham.png" alt="Nearby firms Vancouver" style="width: 100%;"/>
 </div>
 <div style="text-align: center; width: 70%;">
 <h3>Selecting a law firm</h3>
-<img src="frontend/src/assets/selected-firm-vancouver.png" alt="Selected Firm Vancouver" style="width: 100%;"/>
+<img src="frontend/src/assets/selected-firm-markham.png" alt="Selected Firm Vancouver" style="width: 100%;"/>
 </div>
 <div style="text-align: center; width: 70%;">
 <h3>AI-generated summary and benefits of Clio's services for the firm</h3>
@@ -76,7 +76,7 @@ Using a microservice architecture, the web application features an intuitive, ma
 <div style="display: flex; justify-content: space-around; gap: 10px;">
   <div style="text-align: center; width: 45%;">
     <h3>AI-generated pitch</h3>
-    <img src="frontend/src/assets/pitch.png" alt="Pitch" style="width: 100%;"/>
+    <img src="frontend/src/assets/pitch-markham.png" alt="Pitch" style="width: 100%;"/>
   </div>
   <div style="text-align: center; width: 60%;">
     <h3>Email to send to that law firm using the pitch</h3>

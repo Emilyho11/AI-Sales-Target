@@ -105,8 +105,6 @@ app.get('/api/getUserByEmail', async (req, res) => {
 
   try {
     const user = await getUserByEmail(email);
-    console.log("Retrieved user:", user); // Debugging log
-
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
