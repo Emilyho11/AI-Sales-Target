@@ -1,10 +1,10 @@
 # Legal Sales Target App
-This project aims to help Clio's sales and marketing by offering a specialized, client-focused tool to discover potential clients, gain valuable insights about them, and effectively promote Clio.
+This project uses GenAI to find law firms that are the most suitable for Clio's services. It will use that to create personalized pitches and advertisements catered to each firm.
 
 Using a microservice architecture, the web application features an intuitive, map-based interface that allows users to easily explore and target law firms either in their vicinity or within any specific region of interest. Once a firm is selected, the app uses AI to summarize firm websites and give users all the information they need to know about the place. The good thing about this is that it doesn't have to be law firms! This app can be catered towards any business type (ex: doctors, parks, attractions, etc.) and it will always provide users with real-time data.
 
 ### The app also goes a step further by:
-- Assessing the probability that a particular law firm will become a Clio client.
+- Determining how compatible Clio's services are to each law firm.
 - Creating customized messages that highlight how Clio’s software and services can support the specific needs of the law firm, considering their practice areas and operational style.
 - Developing promotional content and tailored pitches/proposals for each law firm.
 - Sending templated or AI-generated emails to the selected law firm to promote Clio or notify them of any updates
@@ -16,7 +16,7 @@ Using a microservice architecture, the web application features an intuitive, ma
 ### Services:
 ![Google Cloud Platform](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) ![Google Maps API](https://img.shields.io/badge/Google_Maps_API-4285F4?style=for-the-badge&logo=google-maps&logoColor=white) ![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white) ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white) ![EmailJS](https://img.shields.io/badge/EmailJS-67C8FF?style=for-the-badge&logo=emailjs&logoColor=white)
 
-## High-Level Diagram
+## High-Level Architecture
 <img src="frontend/src/assets/LegalSalesTarget-Diagram.png" alt="High Level Diagram" width="800"/>
 
 ## How this project was built
@@ -37,7 +37,9 @@ Using a microservice architecture, the web application features an intuitive, ma
 - TailwindCSS: Utility-first CSS framework that makes the styling process in React easier.
 
 ## Challenges
-
+-  When using OpenAI, I had challenges with token limits and choosing the right AI models to get specific responses. Some AI models do not allow searching the web, so I had to find one that did.
+- The email templates and EmailJS uses html, and integrating html with EmailJS and React was one of my challenges. This is because different text being passed in may not be in html. Some were in markdown, so I needed to convert it to html format.
+- When web scraping, I need to ensure that I only gather information from sites where scraping is permitted. I must comply with each site's security policies and terms of service.
 
 ## Running the app
 - Run: `npm start` in the root directory
