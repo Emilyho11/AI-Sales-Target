@@ -26,7 +26,7 @@ Using a microservice architecture, the web application features an intuitive, ma
 - Microsoft Azure: Used as a secondary source for law firm images if GCP does not have it.
 - MongoDB: Stores user data for login, signup, and authentication. The database is hosted on an Microsoft Azure server, and passwords are encrypted.
 - OpenAI API to get:
-    - Summaries of each law firm (including their practice areas, strenghts, potential challenges, and more).
+    - Summaries of each law firm (including their practice areas, strengths, potential challenges, and more).
     - The likelihood of the firm becoming Clio's client (in percentage).
     - How Clio's services/software can specifically help/address the law firm's business needs.
     - Personalized pitch for promoting Clio to the law firm.
@@ -94,8 +94,4 @@ Using a microservice architecture, the web application features an intuitive, ma
     <h3>Email template Sent</h3>
     <img src="frontend/src/assets/email-template-sent.png" alt="Email Template Sent" style="width: 100%;"/>
     </div>
-</div>
-<div style="text-align: center; width: 70%;">
-    <h3>You can zoom in on the map to explore and view the location in detail</h3>
-    <img src="frontend/src/assets/cn-tower.png" alt="CN Tower Map View" style="width: 100%;"/>
 </div>

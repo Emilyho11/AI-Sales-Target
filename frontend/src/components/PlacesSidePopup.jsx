@@ -237,7 +237,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
         )}
         <p className='font-bold flex'>
           <FontAwesomeIcon icon={faChartLine} className="text-lg mr-3" />
-          <p className='font-bold'>Likelihood of becoming a client: <span className='font-normal'>{percentage}</span></p>
+          <p className='font-bold text-black'><span className='font-bold'>{percentage}</span> Compatibility with Clio's Services</p>
         </p>
 
       </div>
@@ -279,8 +279,7 @@ const PlacesSidePopup = ({ lawFirm, handleClosePopup }) => {
             className='flex gap-2 py-2 hover:text-clio_color text-link_color justify-center items-center'
             onClick={clioCompare}
           >
-            How can Clio help?
-            <FontAwesomeIcon icon={faSquareCheck} />
+            How Compatible are Clio's Services?
             <FontAwesomeIcon icon={isComparisonVisible ? faChevronUp : faChevronDown} />
           </button>
           {loadingComparison && comparison === '' && (
