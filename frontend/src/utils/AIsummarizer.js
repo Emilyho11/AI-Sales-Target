@@ -27,7 +27,7 @@ export async function summarizeContent(websiteUrl, promptType = "general", model
     } else if (promptType === "pitch") {
         prompt = `Write a pitch to sell Clio's services/software to the following company. State services it can offer and how clio can benefit them: ${websiteUrl}. Address the company by name.`;
     } else if (promptType === "percentage") {
-        prompt = `Given the current trends in law firm technology adoption, cloud-based software advantages, and recent developments in ${websiteUrl}, predict the likelihood (as a percentage) that ${websiteUrl} will choose to adopt Clio software and become their client. Factors to consider include the benefits of Clio's cloud-based solutions, current market demands for legal tech, client needs, and the potential cost-efficiency advantages for ${websiteUrl}. Provide only a percentage as the answer.`;
+        prompt = `Given the current trends in law firm technology adoption, cloud-based software advantages, and recent developments in ${websiteUrl}, predict the likelihood (as a percentage) that ${websiteUrl} will choose to adopt Clio software and become their client. Factors to consider include the benefits of Clio's cloud-based solutions, current market demands for legal tech, client needs, and the potential cost-efficiency advantages for ${websiteUrl}. Get information about the company. Give me only a percentage as the answer.`;
     }
 
     const selectedModel = modelType;
