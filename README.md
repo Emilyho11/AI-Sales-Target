@@ -44,12 +44,6 @@ Using a microservice architecture, the web application features an intuitive, ma
 ## Running the app
 - Run: `npm start` in the root directory
 
-## Thank you to the following Clions for their valuable insights on Clio's sales teams:
-- Scott Adema
-- Cole Hecht
-- Sahel Hatam
-- Molly Ariunbold
-
 ## Images
 <div style="display: flex; justify-content: space-around; gap: 10px;">
   <div style="text-align: center; width: 48%;">
