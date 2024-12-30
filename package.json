@@ -4,7 +4,8 @@
     "authors": "author",
     "version": "1.0.0",
     "scripts": {
-        "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+        "start": "npm run install-all && concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+        "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ..",
         "start-backend": "concurrently \"node backend/api_gateway/routes/Server.js\" \"node backend/api_gateway/routes/Database.js\"",
         "start-frontend": "cd frontend && npm run dev"
     },
