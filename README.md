@@ -6,6 +6,8 @@ This project uses GenAI to find law firms that are the most suitable for Clio's 
 
 Using a microservice architecture, the web application features an intuitive, map-based interface that allows users to easily explore and target law firms either in their vicinity or within any specific region of interest. Once a firm is selected, the app uses AI to summarize firm websites and give users all the information they need to know about the place. The good thing about this is that it doesn't have to be law firms! This app can be catered towards any business type (ex: doctors, parks, attractions, etc.) and it will always provide users with real-time data.
 
+NOTE: This project does not use or have any confidential information about Clio.
+
 ### The app also goes a step further by:
 - Determining how compatible Clio's services are to each law firm.
 - Creating customized messages that highlight how Clio’s software and services can support the specific needs of the law firm, considering their practice areas and operational style.
